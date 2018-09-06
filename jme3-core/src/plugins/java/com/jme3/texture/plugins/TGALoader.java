@@ -105,7 +105,6 @@ public final class TGALoader implements AssetLoader {
      */
     public static Image load(InputStream in, boolean flip) throws IOException {
         TGAHeader tgaHeader = new TGAHeader(in, flip);
-    	
     	boolean flipH = false;
 
         // Skip image ID
@@ -117,7 +116,6 @@ public final class TGALoader implements AssetLoader {
         cMapEntries = constructColorMapType(tgaHeader, cMapEntries);
 
         // Allocate image data array
-        Format format = null;
         byte[] rawData = null;
         int dl;
         if (tgaHeader.getPixelDepth() == 32) {
@@ -128,24 +126,8 @@ public final class TGALoader implements AssetLoader {
             dl = 3;
         }
         
-        
         int rawDataIndex = 0;
-        if (tgaHeader.getImageType() == TYPE_TRUECOLOR) {
-            // Faster than doing a 16-or-24-or-32 check on each individual pixel,
-            // just make a seperate loop for each.
-            format = determineTrueColorFormatBasedOnPixelDepth(flip, tgaHeader, format, rawData,
-					dl, rawDataIndex);
-        } else if (tgaHeader.getImageType() == TYPE_TRUECOLOR_RLE) {
-            // Faster than doing a 16-or-24-or-32 check on each individual pixel,
-            // just make a seperate loop for each.
-            format = determineTrueColorRleBasedOnPixelDepth(flip, tgaHeader, format, rawData, dl,
-					rawDataIndex);
-        } else if (tgaHeader.getImageType() == TYPE_COLORMAPPED) {
-            format = determineColorMappedFormatBasedOnBytesPerIndex(flip, tgaHeader, cMapEntries, rawData, dl,
-					rawDataIndex, tgaHeader.getPixelDepth());
-        } else {
-            throw new IOException("Monochrome and RLE colormapped images are not supported");
-        }
+        Format format = formatImageDataArray(flip, tgaHeader, cMapEntries, rawData, dl, rawDataIndex);
 
         in.close();
         // Get a pointer to the image memory
@@ -153,6 +135,26 @@ public final class TGALoader implements AssetLoader {
         // Create the Image object
         return createTextureImageObject(tgaHeader, format, scratch);
     }
+
+	private static Format formatImageDataArray(boolean flip, TGAHeader tgaHeader, ColorMapEntry[] cMapEntries,
+			byte[] rawData, int dl, int rawDataIndex) throws IOException {
+		if (tgaHeader.getImageType() == TYPE_TRUECOLOR) {
+            // Faster than doing a 16-or-24-or-32 check on each individual pixel,
+            // just make a seperate loop for each.
+            return determineTrueColorFormatBasedOnPixelDepth(flip, tgaHeader, rawData,
+					dl, rawDataIndex);
+        } else if (tgaHeader.getImageType() == TYPE_TRUECOLOR_RLE) {
+            // Faster than doing a 16-or-24-or-32 check on each individual pixel,
+            // just make a seperate loop for each.
+            return determineTrueColorRleBasedOnPixelDepth(flip, tgaHeader, rawData, dl,
+					rawDataIndex);
+        } else if (tgaHeader.getImageType() == TYPE_COLORMAPPED) {
+            return determineColorMappedFormatBasedOnBytesPerIndex(flip, tgaHeader, cMapEntries, rawData, dl,
+					rawDataIndex, tgaHeader.getPixelDepth());
+        } else {
+            throw new IOException("Monochrome and RLE colormapped images are not supported");
+        }
+	}
 
 	private static ByteBuffer imageMemoryPointer(byte[] rawData) {
 		ByteBuffer scratch = BufferUtils.createByteBuffer(rawData.length);
@@ -224,7 +226,7 @@ public final class TGALoader implements AssetLoader {
 		return format;
 	}
 
-	private static Format determineTrueColorRleBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, Format format, byte[] rawData, int dl, int rawDataIndex) throws IOException {
+	private static Format determineTrueColorRleBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
 		byte red;
 		byte green;
 		byte blue;
@@ -268,7 +270,7 @@ public final class TGALoader implements AssetLoader {
 		            }
 		        }
 		    }
-		    format = Format.RGBA8;
+		    return Format.RGBA8;
 		} else if (tgaHeader.getPixelDepth() == 24) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
 		        if (!flip) {
@@ -303,7 +305,7 @@ public final class TGALoader implements AssetLoader {
 		            }
 		        }
 		    }
-		    format = Format.RGB8;
+		    return Format.RGB8;
 		} else if (tgaHeader.getPixelDepth() == 16) {
 		    byte[] data = new byte[2];
 		    float scalar = 255f / 31f;
@@ -344,14 +346,13 @@ public final class TGALoader implements AssetLoader {
 		            }
 		        }
 		    }
-		    format = Format.RGB8;
+		    return Format.RGB8;
 		} else {
 		    throw new IOException("Unsupported TGA true color depth: " + tgaHeader.getPixelDepth());
 		}
-		return format;
 	}
 
-	private static Format determineTrueColorFormatBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, Format format, byte[] rawData, int dl, int rawDataIndex) throws IOException {
+	private static Format determineTrueColorFormatBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
 		byte red;
 		byte green;
 		byte blue;
@@ -380,7 +381,7 @@ public final class TGALoader implements AssetLoader {
 		        }
 		    }
 
-		    format = dl == 4 ? Format.RGBA8 : Format.RGB8;
+		    return dl == 4 ? Format.RGBA8 : Format.RGB8;
 		} else if (tgaHeader.getPixelDepth() == 24) {
 		    for (int y = 0; y < tgaHeader.getHeight(); y++) {
 		        if (!flip) {
@@ -400,7 +401,7 @@ public final class TGALoader implements AssetLoader {
 //                        rawData[rawDataIndex++] = blue;
 //                    }
 		    }
-		    format = Format.BGR8;
+		    return Format.BGR8;
 		} else if (tgaHeader.getPixelDepth() == 32) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
 		        if (!flip) {
@@ -418,11 +419,10 @@ public final class TGALoader implements AssetLoader {
 		            rawData[rawDataIndex++] = alpha;
 		        }
 		    }
-		    format = Format.RGBA8;
+		    return Format.RGBA8;
 		} else {
 		    throw new IOException("Unsupported TGA true color depth: " + tgaHeader.getPixelDepth());
 		}
-		return format;
 	}
 
 	private static ColorMapEntry[] constructColorMapType(TGAHeader tgaHeader, ColorMapEntry[] cMapEntries) throws IOException {
