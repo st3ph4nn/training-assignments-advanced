@@ -126,8 +126,7 @@ public final class TGALoader implements AssetLoader {
             dl = 3;
         }
         
-        int rawDataIndex = 0;
-        Format format = formatImageDataArray(flip, tgaHeader, cMapEntries, rawData, dl, rawDataIndex);
+        Format format = formatImageDataArray(tgaHeader, cMapEntries, rawData, dl);
 
         in.close();
         // Get a pointer to the image memory
@@ -136,21 +135,20 @@ public final class TGALoader implements AssetLoader {
         return createTextureImageObject(tgaHeader, format, scratch);
     }
 
-	private static Format formatImageDataArray(boolean flip, TGAHeader tgaHeader, ColorMapEntry[] cMapEntries,
-			byte[] rawData, int dl, int rawDataIndex) throws IOException {
+	private static Format formatImageDataArray(TGAHeader tgaHeader, ColorMapEntry[] cMapEntries,
+			byte[] rawData, int dl) throws IOException {
+        int rawDataIndex = 0;
+		
 		if (tgaHeader.getImageType() == TYPE_TRUECOLOR) {
             // Faster than doing a 16-or-24-or-32 check on each individual pixel,
             // just make a seperate loop for each.
-            return determineTrueColorFormatBasedOnPixelDepth(flip, tgaHeader, rawData,
-					dl, rawDataIndex);
+            return determineTrueColorFormatBasedOnPixelDepth(tgaHeader, rawData, dl, rawDataIndex);
         } else if (tgaHeader.getImageType() == TYPE_TRUECOLOR_RLE) {
             // Faster than doing a 16-or-24-or-32 check on each individual pixel,
             // just make a seperate loop for each.
-            return determineTrueColorRleBasedOnPixelDepth(flip, tgaHeader, rawData, dl,
-					rawDataIndex);
+            return determineTrueColorRleBasedOnPixelDepth(tgaHeader, rawData, dl, rawDataIndex);
         } else if (tgaHeader.getImageType() == TYPE_COLORMAPPED) {
-            return determineColorMappedFormatBasedOnBytesPerIndex(flip, tgaHeader, cMapEntries, rawData, dl,
-					rawDataIndex, tgaHeader.getPixelDepth());
+            return determineColorMappedFormatBasedOnBytesPerIndex(tgaHeader, cMapEntries, rawData, dl, rawDataIndex);
         } else {
             throw new IOException("Monochrome and RLE colormapped images are not supported");
         }
@@ -173,13 +171,13 @@ public final class TGALoader implements AssetLoader {
 		return textureImage;
 	}
 
-	private static Format determineColorMappedFormatBasedOnBytesPerIndex(boolean flip, TGAHeader tgaHeader, ColorMapEntry[] cMapEntries, byte[] rawData, int dl, int rawDataIndex, int pixelDepth)
+	private static Format determineColorMappedFormatBasedOnBytesPerIndex(TGAHeader tgaHeader, ColorMapEntry[] cMapEntries, byte[] rawData, int dl, int rawDataIndex)
 			throws IOException {
 		Format format;
-		int bytesPerIndex = pixelDepth / 8;
+		int bytesPerIndex = tgaHeader.getPixelDepth() / 8;
 		if (bytesPerIndex == 1) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 		        for (int j = 0; j < tgaHeader.getWidth(); j++) {
@@ -200,7 +198,7 @@ public final class TGALoader implements AssetLoader {
 		    }
 		} else if (bytesPerIndex == 2) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 		        for (int j = 0; j < tgaHeader.getWidth(); j++) {
@@ -226,14 +224,14 @@ public final class TGALoader implements AssetLoader {
 		return format;
 	}
 
-	private static Format determineTrueColorRleBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
+	private static Format determineTrueColorRleBasedOnPixelDepth(TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
 		byte red;
 		byte green;
 		byte blue;
 		byte alpha;
 		if (tgaHeader.getPixelDepth() == 32) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); ++i) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 
@@ -273,7 +271,7 @@ public final class TGALoader implements AssetLoader {
 		    return Format.RGBA8;
 		} else if (tgaHeader.getPixelDepth() == 24) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 		        for (int j = 0; j < tgaHeader.getWidth(); ++j) {
@@ -310,7 +308,7 @@ public final class TGALoader implements AssetLoader {
 		    byte[] data = new byte[2];
 		    float scalar = 255f / 31f;
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 		        for (int j = 0; j < tgaHeader.getWidth(); j++) {
@@ -352,7 +350,7 @@ public final class TGALoader implements AssetLoader {
 		}
 	}
 
-	private static Format determineTrueColorFormatBasedOnPixelDepth(Boolean flip, TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
+	private static Format determineTrueColorFormatBasedOnPixelDepth(TGAHeader tgaHeader, byte[] rawData, int dl, int rawDataIndex) throws IOException {
 		byte red;
 		byte green;
 		byte blue;
@@ -361,7 +359,7 @@ public final class TGALoader implements AssetLoader {
 		    byte[] data = new byte[2];
 		    float scalar = 255f / 31f;
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 		        for (int j = 0; j < tgaHeader.getWidth(); j++) {
@@ -384,7 +382,7 @@ public final class TGALoader implements AssetLoader {
 		    return dl == 4 ? Format.RGBA8 : Format.RGB8;
 		} else if (tgaHeader.getPixelDepth() == 24) {
 		    for (int y = 0; y < tgaHeader.getHeight(); y++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - y) * tgaHeader.getWidth() * dl;
 		        } else {
 		            rawDataIndex = y * tgaHeader.getWidth() * dl;
@@ -404,7 +402,7 @@ public final class TGALoader implements AssetLoader {
 		    return Format.BGR8;
 		} else if (tgaHeader.getPixelDepth() == 32) {
 		    for (int i = 0; i <= (tgaHeader.getHeight() - 1); i++) {
-		        if (!flip) {
+		        if (!tgaHeader.isFlip()) {
 		            rawDataIndex = (tgaHeader.getHeight() - 1 - i) * tgaHeader.getWidth() * dl;
 		        }
 

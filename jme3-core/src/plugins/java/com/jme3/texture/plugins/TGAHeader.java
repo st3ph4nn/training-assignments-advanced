@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 public class TGAHeader {
 
+	private boolean flip;
 	private boolean flipH = false;
 	private DataInputStream dis;
 	private int idLength;
@@ -61,7 +62,7 @@ public class TGAHeader {
         
         if ((imageDescriptor & 32) != 0) // bit 5 : if 1, flip top/bottom ordering
         {
-            flip = !flip;
+            this.flip = !flip;
         }
         if ((imageDescriptor & 16) != 0) // bit 4 : if 1, flip left/right ordering
         {
@@ -73,7 +74,17 @@ public class TGAHeader {
 	}
 	
 	
-    public boolean isFlipH() {
+    public boolean isFlip() {
+		return flip;
+	}
+
+
+	public void setFlip(boolean flip) {
+		this.flip = flip;
+	}
+
+
+	public boolean isFlipH() {
 		return flipH;
 	}
 
