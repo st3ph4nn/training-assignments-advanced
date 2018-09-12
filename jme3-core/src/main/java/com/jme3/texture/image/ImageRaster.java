@@ -240,7 +240,7 @@ public abstract class ImageRaster {
          }     
     }
     
-    protected void storeValidator(ColorRGBA store, int[] components) {
+    protected void setStoreStates(ColorRGBA store, int[] components) {
     	 if (store == null) {
              store = new ColorRGBA();
          }

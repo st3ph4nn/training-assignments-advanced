@@ -100,7 +100,7 @@ public class MipMapImageRaster extends ImageRaster {
         rangeCheck(x, y);
 
         codec.readComponents(getBuffer(), x, y, width[mipLevel], offsets[mipLevel], components, temp);
-        storeValidator(store, components);
+        setStoreStates(store, components);
         return store;
     }
 

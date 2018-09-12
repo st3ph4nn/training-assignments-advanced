@@ -44,7 +44,6 @@ public class DefaultImageRaster extends ImageRaster {
     private final int offset;
     private final boolean convertToLinear;
  
-    
     private void rangeCheck(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) {
             throw new IllegalArgumentException("x and y must be inside the image dimensions:" 
@@ -121,7 +120,7 @@ public class DefaultImageRaster extends ImageRaster {
         rangeCheck(x, y);
         
         codec.readComponents(getBuffer(), x, y, width, offset, components, temp);
-        storeValidator(store, components);
+        setStoreStates(store, components);
         
         if (convertToLinear) {
             // Input image is sRGB, need to convert to linear.
