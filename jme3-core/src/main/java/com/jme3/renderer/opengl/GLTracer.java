@@ -171,7 +171,7 @@ public final class GLTracer implements InvocationHandler {
      * @return A tracer that implements the given interface
      */
     public static Object createGlesTracer(Object glInterface, Class<?> glInterfaceClass) {
-        IntMap<String> constMap = generateConstantMap(GL.class, GLFbo.class, GLExt.class);
+        IntMap<String> constMap = generateConstantMap(GLConstants.class, GLFbo.class, GLExt.class);
         return Proxy.newProxyInstance(glInterface.getClass().getClassLoader(),
                                       new Class<?>[] { glInterfaceClass }, 
                                       new GLTracer(glInterface, constMap));
@@ -317,17 +317,17 @@ public final class GLTracer implements InvocationHandler {
     private void printArgsClear(int mask) {
         boolean needAPipe = false;
         print("(");
-        if ((mask & GL.GL_COLOR_BUFFER_BIT) != 0) {
+        if ((mask & GLConstants.GL_COLOR_BUFFER_BIT) != 0) {
             printStyle(ANSI_GREEN, "COLOR_BUFFER_BIT");
             needAPipe = true;
         }
-        if ((mask & GL.GL_DEPTH_BUFFER_BIT) != 0) {
+        if ((mask & GLConstants.GL_DEPTH_BUFFER_BIT) != 0) {
             if (needAPipe) {
                 print(" | ");
             }
             printStyle(ANSI_GREEN, "DEPTH_BUFFER_BIT");
         }
-        if ((mask & GL.GL_STENCIL_BUFFER_BIT) != 0) {
+        if ((mask & GLConstants.GL_STENCIL_BUFFER_BIT) != 0) {
             if (needAPipe) {
                 print(" | ");
             }
@@ -363,8 +363,8 @@ public final class GLTracer implements InvocationHandler {
         printEnum(param);
         print(", ");
         
-        if (param == GL.GL_TEXTURE_BASE_LEVEL
-                || param == GL.GL_TEXTURE_MAX_LEVEL) {
+        if (param == GLConstants.GL_TEXTURE_BASE_LEVEL
+                || param == GLConstants.GL_TEXTURE_MAX_LEVEL) {
             printInt(value);
         } else {
             printEnum(value);

@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
  * 
  * @author Kirill Vainer
  */
-public interface GL2 extends GL {
+public interface GL2 extends GLConstants {
     
     public static final int GL_ALPHA8 = 0x803C;
     public static final int GL_ALPHA_TEST = 0xBC0;

@@ -151,11 +151,11 @@ public final class GLRenderer implements Renderer {
             gl3.glGetInteger(GL3.GL_NUM_EXTENSIONS, intBuf16);
             int extensionCount = intBuf16.get(0);
             for (int i = 0; i < extensionCount; i++) {
-                String extension = gl3.glGetString(GL.GL_EXTENSIONS, i);
+                String extension = gl3.glGetString(GLConstants.GL_EXTENSIONS, i);
                 extensionSet.add(extension);
             }
         } else {
-            extensionSet.addAll(Arrays.asList(gl.glGetString(GL.GL_EXTENSIONS).split(" ")));
+            extensionSet.addAll(Arrays.asList(gl.glGetString(GLConstants.GL_EXTENSIONS).split(" ")));
         }
         return extensionSet;
     }
@@ -188,7 +188,7 @@ public final class GLRenderer implements Renderer {
     }
 
     private void loadCapabilitiesGL2() {
-        int oglVer = extractVersion(gl.glGetString(GL.GL_VERSION));
+        int oglVer = extractVersion(gl.glGetString(GLConstants.GL_VERSION));
 
         if (oglVer >= 200) {
             caps.add(Caps.OpenGL20);
@@ -214,7 +214,7 @@ public final class GLRenderer implements Renderer {
             }
         }
 
-        int glslVer = extractVersion(gl.glGetString(GL.GL_SHADING_LANGUAGE_VERSION));
+        int glslVer = extractVersion(gl.glGetString(GLConstants.GL_SHADING_LANGUAGE_VERSION));
 
         switch (glslVer) {
             default:
@@ -262,24 +262,24 @@ public final class GLRenderer implements Renderer {
     private void loadCapabilitiesCommon() {
         extensions = loadExtensions();
 
-        limits.put(Limits.VertexTextureUnits, getInteger(GL.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+        limits.put(Limits.VertexTextureUnits, getInteger(GLConstants.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS));
         if (limits.get(Limits.VertexTextureUnits) > 0) {
             caps.add(Caps.VertexTextureFetch);
         }
 
-        limits.put(Limits.FragmentTextureUnits, getInteger(GL.GL_MAX_TEXTURE_IMAGE_UNITS));
+        limits.put(Limits.FragmentTextureUnits, getInteger(GLConstants.GL_MAX_TEXTURE_IMAGE_UNITS));
 
         if (caps.contains(Caps.OpenGLES20)) {
-            limits.put(Limits.FragmentUniformVectors, getInteger(GL.GL_MAX_FRAGMENT_UNIFORM_VECTORS));
-            limits.put(Limits.VertexUniformVectors, getInteger(GL.GL_MAX_VERTEX_UNIFORM_VECTORS));
+            limits.put(Limits.FragmentUniformVectors, getInteger(GLConstants.GL_MAX_FRAGMENT_UNIFORM_VECTORS));
+            limits.put(Limits.VertexUniformVectors, getInteger(GLConstants.GL_MAX_VERTEX_UNIFORM_VECTORS));
         } else {
-            limits.put(Limits.FragmentUniformVectors, getInteger(GL.GL_MAX_FRAGMENT_UNIFORM_COMPONENTS) / 4);
-            limits.put(Limits.VertexUniformVectors, getInteger(GL.GL_MAX_VERTEX_UNIFORM_COMPONENTS) / 4);
+            limits.put(Limits.FragmentUniformVectors, getInteger(GLConstants.GL_MAX_FRAGMENT_UNIFORM_COMPONENTS) / 4);
+            limits.put(Limits.VertexUniformVectors, getInteger(GLConstants.GL_MAX_VERTEX_UNIFORM_COMPONENTS) / 4);
         }
 
-        limits.put(Limits.VertexAttributes, getInteger(GL.GL_MAX_VERTEX_ATTRIBS));
-        limits.put(Limits.TextureSize, getInteger(GL.GL_MAX_TEXTURE_SIZE));
-        limits.put(Limits.CubemapSize, getInteger(GL.GL_MAX_CUBE_MAP_TEXTURE_SIZE));
+        limits.put(Limits.VertexAttributes, getInteger(GLConstants.GL_MAX_VERTEX_ATTRIBS));
+        limits.put(Limits.TextureSize, getInteger(GLConstants.GL_MAX_TEXTURE_SIZE));
+        limits.put(Limits.CubemapSize, getInteger(GLConstants.GL_MAX_CUBE_MAP_TEXTURE_SIZE));
 
         if (hasExtension("GL_ARB_draw_instanced") &&
                 hasExtension("GL_ARB_instanced_arrays")) {
@@ -476,10 +476,10 @@ public final class GLRenderer implements Renderer {
                         " * GLSL Version: {3}\n" +
                         " * Profile: {4}",
                 new Object[]{
-                        gl.glGetString(GL.GL_VENDOR),
-                        gl.glGetString(GL.GL_RENDERER),
-                        gl.glGetString(GL.GL_VERSION),
-                        gl.glGetString(GL.GL_SHADING_LANGUAGE_VERSION),
+                        gl.glGetString(GLConstants.GL_VENDOR),
+                        gl.glGetString(GLConstants.GL_RENDERER),
+                        gl.glGetString(GLConstants.GL_VERSION),
+                        gl.glGetString(GLConstants.GL_SHADING_LANGUAGE_VERSION),
                         caps.contains(Caps.CoreProfile) ? "Core" : "Compatibility"
                 });
 
@@ -533,7 +533,7 @@ public final class GLRenderer implements Renderer {
         loadCapabilities();
 
         // Initialize default state..
-        gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
+        gl.glPixelStorei(GLConstants.GL_UNPACK_ALIGNMENT, 1);
         
         if (caps.contains(Caps.SeamlessCubemap)) {
             // Enable this globally. Should be OK.
@@ -592,7 +592,7 @@ public final class GLRenderer implements Renderer {
                 gl.glColorMask(true, true, true, true);
                 context.colorWriteEnabled = true;
             }
-            bits = GL.GL_COLOR_BUFFER_BIT;
+            bits = GLConstants.GL_COLOR_BUFFER_BIT;
         }
         if (depth) {
             // glClear(GL.GL_DEPTH_BUFFER_BIT) seems to not work when glDepthMask is false
@@ -603,12 +603,12 @@ public final class GLRenderer implements Renderer {
                 gl.glDepthMask(true);
                 context.depthWriteEnabled = true;
             }
-            bits |= GL.GL_DEPTH_BUFFER_BIT;
+            bits |= GLConstants.GL_DEPTH_BUFFER_BIT;
         }
         if (stencil) {
             // May need to set glStencilMask(0xFF) here if we ever allow users
             // to change the stencil mask.
-            bits |= GL.GL_STENCIL_BUFFER_BIT;
+            bits |= GLConstants.GL_STENCIL_BUFFER_BIT;
         }
         if (bits != 0) {
             gl.glClear(bits);
@@ -643,19 +643,19 @@ public final class GLRenderer implements Renderer {
     public void applyRenderState(RenderState state) {
         if (gl2 != null) {
             if (state.isWireframe() && !context.wireframe) {
-                gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
+                gl2.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GL2.GL_LINE);
                 context.wireframe = true;
             } else if (!state.isWireframe() && context.wireframe) {
-                gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+                gl2.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GL2.GL_FILL);
                 context.wireframe = false;
             }
         }
 
         if (state.isDepthTest() && !context.depthTestEnabled) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GLConstants.GL_DEPTH_TEST);
             context.depthTestEnabled = true;
         } else if (!state.isDepthTest() && context.depthTestEnabled) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GLConstants.GL_DEPTH_TEST);
             context.depthTestEnabled = false;
         }
         if (state.isDepthTest() && state.getDepthFunc() != context.depthFunc) {
@@ -681,7 +681,7 @@ public final class GLRenderer implements Renderer {
 
         if (state.isPolyOffset()) {
             if (!context.polyOffsetEnabled) {
-                gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+                gl.glEnable(GLConstants.GL_POLYGON_OFFSET_FILL);
                 gl.glPolygonOffset(state.getPolyOffsetFactor(),
                         state.getPolyOffsetUnits());
                 context.polyOffsetEnabled = true;
@@ -698,7 +698,7 @@ public final class GLRenderer implements Renderer {
             }
         } else {
             if (context.polyOffsetEnabled) {
-                gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+                gl.glDisable(GLConstants.GL_POLYGON_OFFSET_FILL);
                 context.polyOffsetEnabled = false;
                 context.polyOffsetFactor = 0;
                 context.polyOffsetUnits = 0;
@@ -707,22 +707,22 @@ public final class GLRenderer implements Renderer {
 
         if (state.getFaceCullMode() != context.cullMode) {
             if (state.getFaceCullMode() == RenderState.FaceCullMode.Off) {
-                gl.glDisable(GL.GL_CULL_FACE);
+                gl.glDisable(GLConstants.GL_CULL_FACE);
             } else {
-                gl.glEnable(GL.GL_CULL_FACE);
+                gl.glEnable(GLConstants.GL_CULL_FACE);
             }
 
             switch (state.getFaceCullMode()) {
                 case Off:
                     break;
                 case Back:
-                    gl.glCullFace(GL.GL_BACK);
+                    gl.glCullFace(GLConstants.GL_BACK);
                     break;
                 case Front:
-                    gl.glCullFace(GL.GL_FRONT);
+                    gl.glCullFace(GLConstants.GL_FRONT);
                     break;
                 case FrontAndBack:
-                    gl.glCullFace(GL.GL_FRONT_AND_BACK);
+                    gl.glCullFace(GLConstants.GL_FRONT_AND_BACK);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unrecognized face cull mode: "
@@ -734,38 +734,38 @@ public final class GLRenderer implements Renderer {
 
         if (state.getBlendMode() != context.blendMode) {
             if (state.getBlendMode() == RenderState.BlendMode.Off) {
-                gl.glDisable(GL.GL_BLEND);
+                gl.glDisable(GLConstants.GL_BLEND);
             } else {
                 if (context.blendMode == RenderState.BlendMode.Off) {
-                    gl.glEnable(GL.GL_BLEND);
+                    gl.glEnable(GLConstants.GL_BLEND);
                 }
                 switch (state.getBlendMode()) {
                     case Off:
                         break;
                     case Additive:
-                        gl.glBlendFunc(GL.GL_ONE, GL.GL_ONE);
+                        gl.glBlendFunc(GLConstants.GL_ONE, GLConstants.GL_ONE);
                         break;
                     case AlphaAdditive:
-                        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE);
+                        gl.glBlendFunc(GLConstants.GL_SRC_ALPHA, GLConstants.GL_ONE);
                         break;
                     case Alpha:
-                        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                        gl.glBlendFunc(GLConstants.GL_SRC_ALPHA, GLConstants.GL_ONE_MINUS_SRC_ALPHA);
                         break;
                     case PremultAlpha:
-                        gl.glBlendFunc(GL.GL_ONE, GL.GL_ONE_MINUS_SRC_ALPHA);
+                        gl.glBlendFunc(GLConstants.GL_ONE, GLConstants.GL_ONE_MINUS_SRC_ALPHA);
                         break;
                     case Modulate:
-                        gl.glBlendFunc(GL.GL_DST_COLOR, GL.GL_ZERO);
+                        gl.glBlendFunc(GLConstants.GL_DST_COLOR, GLConstants.GL_ZERO);
                         break;
                     case ModulateX2:
-                        gl.glBlendFunc(GL.GL_DST_COLOR, GL.GL_SRC_COLOR);
+                        gl.glBlendFunc(GLConstants.GL_DST_COLOR, GLConstants.GL_SRC_COLOR);
                         break;
                     case Color:
                     case Screen:
-                        gl.glBlendFunc(GL.GL_ONE, GL.GL_ONE_MINUS_SRC_COLOR);
+                        gl.glBlendFunc(GLConstants.GL_ONE, GLConstants.GL_ONE_MINUS_SRC_COLOR);
                         break;
                     case Exclusion:
-                        gl.glBlendFunc(GL.GL_ONE_MINUS_DST_COLOR, GL.GL_ONE_MINUS_SRC_COLOR);
+                        gl.glBlendFunc(GLConstants.GL_ONE_MINUS_DST_COLOR, GLConstants.GL_ONE_MINUS_SRC_COLOR);
                         break;
                     case Custom:
                         gl.glBlendFuncSeparate(
@@ -816,23 +816,23 @@ public final class GLRenderer implements Renderer {
             context.backStencilFunction = state.getBackStencilFunction();
 
             if (state.isStencilTest()) {
-                gl.glEnable(GL.GL_STENCIL_TEST);
-                gl.glStencilOpSeparate(GL.GL_FRONT,
+                gl.glEnable(GLConstants.GL_STENCIL_TEST);
+                gl.glStencilOpSeparate(GLConstants.GL_FRONT,
                         convertStencilOperation(state.getFrontStencilStencilFailOperation()),
                         convertStencilOperation(state.getFrontStencilDepthFailOperation()),
                         convertStencilOperation(state.getFrontStencilDepthPassOperation()));
-                gl.glStencilOpSeparate(GL.GL_BACK,
+                gl.glStencilOpSeparate(GLConstants.GL_BACK,
                         convertStencilOperation(state.getBackStencilStencilFailOperation()),
                         convertStencilOperation(state.getBackStencilDepthFailOperation()),
                         convertStencilOperation(state.getBackStencilDepthPassOperation()));
-                gl.glStencilFuncSeparate(GL.GL_FRONT,
+                gl.glStencilFuncSeparate(GLConstants.GL_FRONT,
                         convertTestFunction(state.getFrontStencilFunction()),
                         0, Integer.MAX_VALUE);
-                gl.glStencilFuncSeparate(GL.GL_BACK,
+                gl.glStencilFuncSeparate(GLConstants.GL_BACK,
                         convertTestFunction(state.getBackStencilFunction()),
                         0, Integer.MAX_VALUE);
             } else {
-                gl.glDisable(GL.GL_STENCIL_TEST);
+                gl.glDisable(GLConstants.GL_STENCIL_TEST);
             }
         }
         if (context.lineWidth != state.getLineWidth()) {
@@ -879,27 +879,27 @@ public final class GLRenderer implements Renderer {
     private int convertBlendFunc(BlendFunc blendFunc) {
         switch (blendFunc) {
             case Zero:
-                return GL.GL_ZERO;
+                return GLConstants.GL_ZERO;
             case One:
-                return GL.GL_ONE;
+                return GLConstants.GL_ONE;
             case Src_Color:
-                return GL.GL_SRC_COLOR;
+                return GLConstants.GL_SRC_COLOR;
             case One_Minus_Src_Color:
-                return GL.GL_ONE_MINUS_SRC_COLOR;
+                return GLConstants.GL_ONE_MINUS_SRC_COLOR;
             case Dst_Color:
-                return GL.GL_DST_COLOR;
+                return GLConstants.GL_DST_COLOR;
             case One_Minus_Dst_Color:
-                return GL.GL_ONE_MINUS_DST_COLOR;
+                return GLConstants.GL_ONE_MINUS_DST_COLOR;
             case Src_Alpha:
-                return GL.GL_SRC_ALPHA;
+                return GLConstants.GL_SRC_ALPHA;
             case One_Minus_Src_Alpha:
-                return GL.GL_ONE_MINUS_SRC_ALPHA;
+                return GLConstants.GL_ONE_MINUS_SRC_ALPHA;
             case Dst_Alpha:
-                return GL.GL_DST_ALPHA;
+                return GLConstants.GL_DST_ALPHA;
             case One_Minus_Dst_Alpha:
-                return GL.GL_ONE_MINUS_DST_ALPHA;
+                return GLConstants.GL_ONE_MINUS_DST_ALPHA;
             case Src_Alpha_Saturate:        
-                return GL.GL_SRC_ALPHA_SATURATE;
+                return GLConstants.GL_SRC_ALPHA_SATURATE;
             default:
                 throw new UnsupportedOperationException("Unrecognized blend function operation: " + blendFunc);
          }
@@ -908,21 +908,21 @@ public final class GLRenderer implements Renderer {
     private int convertStencilOperation(StencilOperation stencilOp) {
         switch (stencilOp) {
             case Keep:
-                return GL.GL_KEEP;
+                return GLConstants.GL_KEEP;
             case Zero:
-                return GL.GL_ZERO;
+                return GLConstants.GL_ZERO;
             case Replace:
-                return GL.GL_REPLACE;
+                return GLConstants.GL_REPLACE;
             case Increment:
-                return GL.GL_INCR;
+                return GLConstants.GL_INCR;
             case IncrementWrap:
-                return GL.GL_INCR_WRAP;
+                return GLConstants.GL_INCR_WRAP;
             case Decrement:
-                return GL.GL_DECR;
+                return GLConstants.GL_DECR;
             case DecrementWrap:
-                return GL.GL_DECR_WRAP;
+                return GLConstants.GL_DECR_WRAP;
             case Invert:
-                return GL.GL_INVERT;
+                return GLConstants.GL_INVERT;
             default:
                 throw new UnsupportedOperationException("Unrecognized stencil operation: " + stencilOp);
         }
@@ -931,21 +931,21 @@ public final class GLRenderer implements Renderer {
     private int convertTestFunction(TestFunction testFunc) {
         switch (testFunc) {
             case Never:
-                return GL.GL_NEVER;
+                return GLConstants.GL_NEVER;
             case Less:
-                return GL.GL_LESS;
+                return GLConstants.GL_LESS;
             case LessOrEqual:
-                return GL.GL_LEQUAL;
+                return GLConstants.GL_LEQUAL;
             case Greater:
-                return GL.GL_GREATER;
+                return GLConstants.GL_GREATER;
             case GreaterOrEqual:
-                return GL.GL_GEQUAL;
+                return GLConstants.GL_GEQUAL;
             case Equal:
-                return GL.GL_EQUAL;
+                return GLConstants.GL_EQUAL;
             case NotEqual:
-                return GL.GL_NOTEQUAL;
+                return GLConstants.GL_NOTEQUAL;
             case Always:
-                return GL.GL_ALWAYS;
+                return GLConstants.GL_ALWAYS;
             default:
                 throw new UnsupportedOperationException("Unrecognized test function: " + testFunc);
         }
@@ -966,7 +966,7 @@ public final class GLRenderer implements Renderer {
 
     public void setClipRect(int x, int y, int width, int height) {
         if (!context.clipRectEnabled) {
-            gl.glEnable(GL.GL_SCISSOR_TEST);
+            gl.glEnable(GLConstants.GL_SCISSOR_TEST);
             context.clipRectEnabled = true;
         }
         if (clipX != x || clipY != y || clipW != width || clipH != height) {
@@ -980,7 +980,7 @@ public final class GLRenderer implements Renderer {
 
     public void clearClipRect() {
         if (context.clipRectEnabled) {
-            gl.glDisable(GL.GL_SCISSOR_TEST);
+            gl.glDisable(GLConstants.GL_SCISSOR_TEST);
             context.clipRectEnabled = false;
 
             clipX = 0;
@@ -1082,7 +1082,7 @@ public final class GLRenderer implements Renderer {
                 break;
             case Boolean:
                 Boolean b = (Boolean) uniform.getValue();
-                gl.glUniform1i(loc, b.booleanValue() ? GL.GL_TRUE : GL.GL_FALSE);
+                gl.glUniform1i(loc, b.booleanValue() ? GLConstants.GL_TRUE : GLConstants.GL_FALSE);
                 break;
             case Matrix3:
                 fb = uniform.getMultiData();
@@ -1148,9 +1148,9 @@ public final class GLRenderer implements Renderer {
     public int convertShaderType(ShaderType type) {
         switch (type) {
             case Fragment:
-                return GL.GL_FRAGMENT_SHADER;
+                return GLConstants.GL_FRAGMENT_SHADER;
             case Vertex:
-                return GL.GL_VERTEX_SHADER;
+                return GLConstants.GL_VERTEX_SHADER;
             case Geometry:
                 return GL3.GL_GEOMETRY_SHADER;
             case TessellationControl:
@@ -1227,15 +1227,15 @@ public final class GLRenderer implements Renderer {
         gl.glShaderSource(id, new String[]{ stringBuf.toString() }, intBuf1);
         gl.glCompileShader(id);
 
-        gl.glGetShader(id, GL.GL_COMPILE_STATUS, intBuf1);
+        gl.glGetShader(id, GLConstants.GL_COMPILE_STATUS, intBuf1);
 
-        boolean compiledOK = intBuf1.get(0) == GL.GL_TRUE;
+        boolean compiledOK = intBuf1.get(0) == GLConstants.GL_TRUE;
         String infoLog = null;
 
         if (VALIDATE_SHADER || !compiledOK) {
             // even if compile succeeded, check
             // log for warnings
-            gl.glGetShader(id, GL.GL_INFO_LOG_LENGTH, intBuf1);
+            gl.glGetShader(id, GLConstants.GL_INFO_LOG_LENGTH, intBuf1);
             int length = intBuf1.get(0);
             if (length > 3) {
                 // get infos
@@ -1302,12 +1302,12 @@ public final class GLRenderer implements Renderer {
         gl.glLinkProgram(id);
 
         // Check link status
-        gl.glGetProgram(id, GL.GL_LINK_STATUS, intBuf1);
-        boolean linkOK = intBuf1.get(0) == GL.GL_TRUE;
+        gl.glGetProgram(id, GLConstants.GL_LINK_STATUS, intBuf1);
+        boolean linkOK = intBuf1.get(0) == GLConstants.GL_TRUE;
         String infoLog = null;
 
         if (VALIDATE_SHADER || !linkOK) {
-            gl.glGetProgram(id, GL.GL_INFO_LOG_LENGTH, intBuf1);
+            gl.glGetProgram(id, GLConstants.GL_INFO_LOG_LENGTH, intBuf1);
             int length = intBuf1.get(0);
             if (length > 3) {
                 // get infos
@@ -1445,13 +1445,13 @@ public final class GLRenderer implements Renderer {
                 dstX1 = dst.getWidth();
                 dstY1 = dst.getHeight();
             }
-            int mask = GL.GL_COLOR_BUFFER_BIT;
+            int mask = GLConstants.GL_COLOR_BUFFER_BIT;
             if (copyDepth) {
-                mask |= GL.GL_DEPTH_BUFFER_BIT;
+                mask |= GLConstants.GL_DEPTH_BUFFER_BIT;
             }
             glfbo.glBlitFramebufferEXT(srcX0, srcY0, srcX1, srcY1,
                     dstX0, dstY0, dstX1, dstY1, mask,
-                    GL.GL_NEAREST);
+                    GLConstants.GL_NEAREST);
 
 
             glfbo.glBindFramebufferEXT(GLFbo.GL_FRAMEBUFFER_EXT, prevFBO);
@@ -1702,11 +1702,11 @@ public final class GLRenderer implements Renderer {
                 // make sure to select NONE as draw buf
                 // no color buffer attached.
                 if (context.boundDrawBuf != NONE) {
-                    gl2.glDrawBuffer(GL.GL_NONE);
+                    gl2.glDrawBuffer(GLConstants.GL_NONE);
                     context.boundDrawBuf = NONE;
                 }
                 if (context.boundReadBuf != NONE) {
-                    gl2.glReadBuffer(GL.GL_NONE);
+                    gl2.glReadBuffer(GLConstants.GL_NONE);
                     context.boundReadBuf = NONE;
                 }
             } else {
@@ -1801,7 +1801,7 @@ public final class GLRenderer implements Renderer {
     }
 
     public void readFrameBuffer(FrameBuffer fb, ByteBuffer byteBuf) {
-        readFrameBufferWithGLFormat(fb, byteBuf, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE);
+        readFrameBufferWithGLFormat(fb, byteBuf, GLConstants.GL_RGBA, GLConstants.GL_UNSIGNED_BYTE);
     }
 
     private void readFrameBufferWithGLFormat(FrameBuffer fb, ByteBuffer byteBuf, int glFormat, int dataType) {
@@ -1872,7 +1872,7 @@ public final class GLRenderer implements Renderer {
                 if (samples > 1) {
                     return GLExt.GL_TEXTURE_2D_MULTISAMPLE;
                 } else {
-                    return GL.GL_TEXTURE_2D;
+                    return GLConstants.GL_TEXTURE_2D;
                 }
             case TwoDimensionalArray:
                 if (!caps.contains(Caps.TextureArray)) {
@@ -1892,9 +1892,9 @@ public final class GLRenderer implements Renderer {
                 return GL2.GL_TEXTURE_3D;
             case CubeMap:
                 if (face < 0) {
-                    return GL.GL_TEXTURE_CUBE_MAP;
+                    return GLConstants.GL_TEXTURE_CUBE_MAP;
                 } else if (face < 6) {
-                    return GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + face;
+                    return GLConstants.GL_TEXTURE_CUBE_MAP_POSITIVE_X + face;
                 } else {
                     throw new UnsupportedOperationException("Invalid cube map face index: " + face);
                 }
@@ -1906,9 +1906,9 @@ public final class GLRenderer implements Renderer {
     private int convertMagFilter(Texture.MagFilter filter) {
         switch (filter) {
             case Bilinear:
-                return GL.GL_LINEAR;
+                return GLConstants.GL_LINEAR;
             case Nearest:
-                return GL.GL_NEAREST;
+                return GLConstants.GL_NEAREST;
             default:
                 throw new UnsupportedOperationException("Unknown mag filter: " + filter);
         }
@@ -1918,17 +1918,17 @@ public final class GLRenderer implements Renderer {
         if (haveMips){
             switch (filter) {
                 case Trilinear:
-                    return GL.GL_LINEAR_MIPMAP_LINEAR;
+                    return GLConstants.GL_LINEAR_MIPMAP_LINEAR;
                 case BilinearNearestMipMap:
-                    return GL.GL_LINEAR_MIPMAP_NEAREST;
+                    return GLConstants.GL_LINEAR_MIPMAP_NEAREST;
                 case NearestLinearMipMap:
-                    return GL.GL_NEAREST_MIPMAP_LINEAR;
+                    return GLConstants.GL_NEAREST_MIPMAP_LINEAR;
                 case NearestNearestMipMap:
-                    return GL.GL_NEAREST_MIPMAP_NEAREST;
+                    return GLConstants.GL_NEAREST_MIPMAP_NEAREST;
                 case BilinearNoMipMaps:
-                    return GL.GL_LINEAR;
+                    return GLConstants.GL_LINEAR;
                 case NearestNoMipMaps:
-                    return GL.GL_NEAREST;
+                    return GLConstants.GL_NEAREST;
                 default:
                     throw new UnsupportedOperationException("Unknown min filter: " + filter);
             }
@@ -1937,11 +1937,11 @@ public final class GLRenderer implements Renderer {
                 case Trilinear:
                 case BilinearNearestMipMap:
                 case BilinearNoMipMaps:
-                    return GL.GL_LINEAR;
+                    return GLConstants.GL_LINEAR;
                 case NearestLinearMipMap:
                 case NearestNearestMipMap:
                 case NearestNoMipMaps:
-                    return GL.GL_NEAREST;
+                    return GLConstants.GL_NEAREST;
                 default:
                     throw new UnsupportedOperationException("Unknown min filter: " + filter);
             }
@@ -1954,11 +1954,11 @@ public final class GLRenderer implements Renderer {
             case Clamp:
             case EdgeClamp:
                 // Falldown intentional.
-                return GL.GL_CLAMP_TO_EDGE;
+                return GLConstants.GL_CLAMP_TO_EDGE;
             case Repeat:
-                return GL.GL_REPEAT;
+                return GLConstants.GL_REPEAT;
             case MirroredRepeat:
-                return GL.GL_MIRRORED_REPEAT;
+                return GLConstants.GL_MIRRORED_REPEAT;
             default:
                 throw new UnsupportedOperationException("Unknown wrap mode: " + mode);
         }
@@ -1978,12 +1978,12 @@ public final class GLRenderer implements Renderer {
 
         if (curState.magFilter != tex.getMagFilter()) {
             bindTextureAndUnit(target, image, unit);
-            gl.glTexParameteri(target, GL.GL_TEXTURE_MAG_FILTER, convertMagFilter(tex.getMagFilter()));
+            gl.glTexParameteri(target, GLConstants.GL_TEXTURE_MAG_FILTER, convertMagFilter(tex.getMagFilter()));
             curState.magFilter = tex.getMagFilter();
         }
         if (curState.minFilter != tex.getMinFilter()) {
             bindTextureAndUnit(target, image, unit);
-            gl.glTexParameteri(target, GL.GL_TEXTURE_MIN_FILTER, convertMinFilter(tex.getMinFilter(), haveMips));
+            gl.glTexParameteri(target, GLConstants.GL_TEXTURE_MIN_FILTER, convertMinFilter(tex.getMinFilter(), haveMips));
             curState.minFilter = tex.getMinFilter();
         }
 
@@ -2013,12 +2013,12 @@ public final class GLRenderer implements Renderer {
             case TwoDimensionalArray:
                 if (curState.tWrap != tex.getWrap(WrapAxis.T)) {
                     bindTextureAndUnit(target, image, unit);
-                    gl.glTexParameteri(target, GL.GL_TEXTURE_WRAP_T, convertWrapMode(tex.getWrap(WrapAxis.T)));
+                    gl.glTexParameteri(target, GLConstants.GL_TEXTURE_WRAP_T, convertWrapMode(tex.getWrap(WrapAxis.T)));
                     image.getLastTextureState().tWrap = tex.getWrap(WrapAxis.T);
                 }
                 if (curState.sWrap != tex.getWrap(WrapAxis.S)) {
                     bindTextureAndUnit(target, image, unit);
-                    gl.glTexParameteri(target, GL.GL_TEXTURE_WRAP_S, convertWrapMode(tex.getWrap(WrapAxis.S)));
+                    gl.glTexParameteri(target, GLConstants.GL_TEXTURE_WRAP_S, convertWrapMode(tex.getWrap(WrapAxis.S)));
                     curState.sWrap = tex.getWrap(WrapAxis.S);
                 }
                 break;
@@ -2032,12 +2032,12 @@ public final class GLRenderer implements Renderer {
             if (texCompareMode != ShadowCompareMode.Off) {
                 gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_MODE, GL2.GL_COMPARE_REF_TO_TEXTURE);
                 if (texCompareMode == ShadowCompareMode.GreaterOrEqual) {
-                    gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_FUNC, GL.GL_GEQUAL);
+                    gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_FUNC, GLConstants.GL_GEQUAL);
                 } else {
-                    gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_FUNC, GL.GL_LEQUAL);
+                    gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_FUNC, GLConstants.GL_LEQUAL);
                 }
             } else {
-                gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_MODE, GL.GL_NONE);
+                gl2.glTexParameteri(target, GL2.GL_TEXTURE_COMPARE_MODE, GLConstants.GL_NONE);
             }
             curState.shadowCompareMode = texCompareMode;
         }
@@ -2111,7 +2111,7 @@ public final class GLRenderer implements Renderer {
      */
     private void bindTextureAndUnit(int target, Image img, int unit) {
         if (context.boundTextureUnit != unit) {
-            gl.glActiveTexture(GL.GL_TEXTURE0 + unit);
+            gl.glActiveTexture(GLConstants.GL_TEXTURE0 + unit);
             context.boundTextureUnit = unit;
         }
         if (context.boundTextures[unit] != img) {
@@ -2134,7 +2134,7 @@ public final class GLRenderer implements Renderer {
     private void bindTextureOnly(int target, Image img, int unit) {
         if (context.boundTextures[unit] != img) {
             if (context.boundTextureUnit != unit) {
-                gl.glActiveTexture(GL.GL_TEXTURE0 + unit);
+                gl.glActiveTexture(GLConstants.GL_TEXTURE0 + unit);
                 context.boundTextureUnit = unit;
             }
             gl.glBindTexture(target, img.getId());
@@ -2175,7 +2175,7 @@ public final class GLRenderer implements Renderer {
             // Generate from base level.
 
             if (!caps.contains(Caps.FrameBuffer) && gl2 != null) {
-                gl2.glTexParameteri(target, GL2.GL_GENERATE_MIPMAP, GL.GL_TRUE);
+                gl2.glTexParameteri(target, GL2.GL_GENERATE_MIPMAP, GLConstants.GL_TRUE);
                 img.setMipmapsGenerated(true);
             } else {
                 // For OpenGL3 and up.
@@ -2184,11 +2184,11 @@ public final class GLRenderer implements Renderer {
         } else if (img.hasMipmaps()) {
             // Image already has mipmaps, set the max level based on the 
             // number of mipmaps we have.
-            gl.glTexParameteri(target, GL.GL_TEXTURE_MAX_LEVEL, img.getMipMapSizes().length - 1);
+            gl.glTexParameteri(target, GLConstants.GL_TEXTURE_MAX_LEVEL, img.getMipMapSizes().length - 1);
         } else {
             // Image does not have mipmaps and they are not required.
             // Specify that that the texture has no mipmaps.
-            gl.glTexParameteri(target, GL.GL_TEXTURE_MAX_LEVEL, 0);
+            gl.glTexParameteri(target, GLConstants.GL_TEXTURE_MAX_LEVEL, 0);
         }
 
         int imageSamples = img.getMultiSamples();
@@ -2212,7 +2212,7 @@ public final class GLRenderer implements Renderer {
             throw new RendererException("Depth textures are not supported by the video hardware");
         }
 
-        if (target == GL.GL_TEXTURE_CUBE_MAP) {
+        if (target == GLConstants.GL_TEXTURE_CUBE_MAP) {
             // Check max texture size before upload
             int cubeSize = limits.get(Limits.CubemapSize);
             if (img.getWidth() > cubeSize || img.getHeight() > cubeSize) {
@@ -2234,7 +2234,7 @@ public final class GLRenderer implements Renderer {
         } else {
             imageForUpload = img;
         }
-        if (target == GL.GL_TEXTURE_CUBE_MAP) {
+        if (target == GLConstants.GL_TEXTURE_CUBE_MAP) {
             List<ByteBuffer> data = imageForUpload.getData();
             if (data.size() != 6) {
                 logger.log(Level.WARNING, "Invalid texture: {0}\n"
@@ -2242,7 +2242,7 @@ public final class GLRenderer implements Renderer {
                 return;
             }
             for (int i = 0; i < 6; i++) {
-                texUtil.uploadTexture(imageForUpload, GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, i, linearizeSrgbImages);
+                texUtil.uploadTexture(imageForUpload, GLConstants.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, i, linearizeSrgbImages);
             }
         } else if (target == GLExt.GL_TEXTURE_2D_ARRAY_EXT) {
             if (!caps.contains(Caps.TextureArray)) {
@@ -2331,11 +2331,11 @@ public final class GLRenderer implements Renderer {
     private int convertUsage(Usage usage) {
         switch (usage) {
             case Static:
-                return GL.GL_STATIC_DRAW;
+                return GLConstants.GL_STATIC_DRAW;
             case Dynamic:
-                return GL.GL_DYNAMIC_DRAW;
+                return GLConstants.GL_DYNAMIC_DRAW;
             case Stream:
-                return GL.GL_STREAM_DRAW;
+                return GLConstants.GL_STREAM_DRAW;
             default:
                 throw new UnsupportedOperationException("Unknown usage type.");
         }
@@ -2344,21 +2344,21 @@ public final class GLRenderer implements Renderer {
     private int convertFormat(Format format) {
         switch (format) {
             case Byte:
-                return GL.GL_BYTE;
+                return GLConstants.GL_BYTE;
             case UnsignedByte:
-                return GL.GL_UNSIGNED_BYTE;
+                return GLConstants.GL_UNSIGNED_BYTE;
             case Short:
-                return GL.GL_SHORT;
+                return GLConstants.GL_SHORT;
             case UnsignedShort:
-                return GL.GL_UNSIGNED_SHORT;
+                return GLConstants.GL_UNSIGNED_SHORT;
             case Int:
-                return GL.GL_INT;
+                return GLConstants.GL_INT;
             case UnsignedInt:
-                return GL.GL_UNSIGNED_INT;
+                return GLConstants.GL_UNSIGNED_INT;
             case Float:
-                return GL.GL_FLOAT;
+                return GLConstants.GL_FLOAT;
             case Double:
-                return GL.GL_DOUBLE;
+                return GLConstants.GL_DOUBLE;
             default:
                 throw new UnsupportedOperationException("Unknown buffer format.");
 
@@ -2383,7 +2383,7 @@ public final class GLRenderer implements Renderer {
         // bind buffer
         int target;
         if (vb.getBufferType() == VertexBuffer.Type.Index) {
-            target = GL.GL_ELEMENT_ARRAY_BUFFER;
+            target = GLConstants.GL_ELEMENT_ARRAY_BUFFER;
             if (context.boundElementArrayVBO != bufId) {
                 gl.glBindBuffer(target, bufId);
                 context.boundElementArrayVBO = bufId;
@@ -2392,7 +2392,7 @@ public final class GLRenderer implements Renderer {
                 //statistics.onVertexBufferUse(vb, false);
             }
         } else {
-            target = GL.GL_ARRAY_BUFFER;
+            target = GLConstants.GL_ARRAY_BUFFER;
             if (context.boundArrayVBO != bufId) {
                 gl.glBindBuffer(target, bufId);
                 context.boundArrayVBO = bufId;
@@ -2512,7 +2512,7 @@ public final class GLRenderer implements Renderer {
             int bufId = idb != null ? idb.getId() : vb.getId();
             assert bufId != -1;
             if (context.boundArrayVBO != bufId) {
-                gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufId);
+                gl.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, bufId);
                 context.boundArrayVBO = bufId;
                 //statistics.onVertexBufferUse(vb, true);
             } else {
@@ -2601,7 +2601,7 @@ public final class GLRenderer implements Renderer {
         assert bufId != -1;
 
         if (context.boundElementArrayVBO != bufId) {
-            gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, bufId);
+            gl.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, bufId);
             context.boundElementArrayVBO = bufId;
             //statistics.onVertexBufferUse(indexBuf, true);
         } else {
@@ -2671,19 +2671,19 @@ public final class GLRenderer implements Renderer {
     public int convertElementMode(Mesh.Mode mode) {
         switch (mode) {
             case Points:
-                return GL.GL_POINTS;
+                return GLConstants.GL_POINTS;
             case Lines:
-                return GL.GL_LINES;
+                return GLConstants.GL_LINES;
             case LineLoop:
-                return GL.GL_LINE_LOOP;
+                return GLConstants.GL_LINE_LOOP;
             case LineStrip:
-                return GL.GL_LINE_STRIP;
+                return GLConstants.GL_LINE_STRIP;
             case Triangles:
-                return GL.GL_TRIANGLES;
+                return GLConstants.GL_TRIANGLES;
             case TriangleFan:
-                return GL.GL_TRIANGLE_FAN;
+                return GLConstants.GL_TRIANGLE_FAN;
             case TriangleStrip:
-                return GL.GL_TRIANGLE_STRIP;
+                return GLConstants.GL_TRIANGLE_STRIP;
             case Patch:
                 return GL4.GL_PATCHES;
             default:

@@ -9,19 +9,19 @@ public abstract class GLDebug {
     protected String decodeError(int err) {
         String errMsg;
         switch (err) {
-            case GL.GL_NO_ERROR:
+            case GLConstants.GL_NO_ERROR:
                 errMsg = "No Error";
                 break;
-            case GL.GL_INVALID_ENUM:
+            case GLConstants.GL_INVALID_ENUM:
                 errMsg = "Invalid enum argument";
                 break;
-            case GL.GL_INVALID_OPERATION:
+            case GLConstants.GL_INVALID_OPERATION:
                 errMsg = "Invalid operation";
                 break;
-            case GL.GL_INVALID_VALUE:
+            case GLConstants.GL_INVALID_VALUE:
                 errMsg = "Invalid numeric argument";
                 break;
-            case GL.GL_OUT_OF_MEMORY:
+            case GLConstants.GL_OUT_OF_MEMORY:
                 errMsg = "Out of memory";
                 break;
             case GLFbo.GL_INVALID_FRAMEBUFFER_OPERATION_EXT:

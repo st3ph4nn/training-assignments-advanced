@@ -107,25 +107,25 @@ final class TextureUtil {
         // Needed for OpenGL 3.3 to support luminance / alpha formats
         switch (format) {
             case Alpha8:
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GL.GL_ZERO);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GL.GL_ZERO);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GL.GL_ZERO);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GL.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GLConstants.GL_ZERO);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GLConstants.GL_ZERO);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GLConstants.GL_ZERO);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GLConstants.GL_RED);
                 break;
             case Luminance8:
             case Luminance16F:
             case Luminance32F:
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GL.GL_ONE);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GLConstants.GL_ONE);
                 break;
             case Luminance8Alpha8:
             case Luminance16FAlpha16F:
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GL.GL_RED);
-                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GL.GL_GREEN);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_R, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_G, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_B, GLConstants.GL_RED);
+                gl.glTexParameteri(target, GL3.GL_TEXTURE_SWIZZLE_A, GLConstants.GL_GREEN);
                 break;
         }
     }
@@ -292,7 +292,7 @@ final class TextureUtil {
     }
 
     public void uploadSubTexture(Image image, int target, int index, int x, int y, boolean linearizeSrgb) {
-        if (target != GL.GL_TEXTURE_2D || image.getDepth() > 1) {
+        if (target != GLConstants.GL_TEXTURE_2D || image.getDepth() > 1) {
             throw new UnsupportedOperationException("Updating non-2D texture is not supported");
         }
         

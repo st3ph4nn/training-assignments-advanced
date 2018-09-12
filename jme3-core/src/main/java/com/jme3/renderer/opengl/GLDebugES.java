@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
-public class GLDebugES extends GLDebug implements GL, GLFbo, GLExt {
+public class GLDebugES extends GLDebug implements GLConstants, GLFbo, GLExt {
 
     private final GLFbo glfbo;
     private final GLExt glext;
