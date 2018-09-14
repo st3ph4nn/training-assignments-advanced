@@ -12,7 +12,9 @@ apply plugin: 'base'
 apply plugin: 'eclipse'
 apply from: file('version.gradle')
 
-
+plugins {
+  id "org.sonarqube" version "2.6"
+}
 
 // This is applied to all sub projects
 subprojects {
