@@ -33,7 +33,7 @@ package com.jme3.renderer.opengl;
 
 import com.jme3.renderer.Caps;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import java.util.EnumSet;
 
 /**
@@ -45,21 +45,21 @@ public final class GLImageFormats {
     
     private GLImageFormats() { }
     
-    private static void format(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void format(GLImageFormat[][] formatToGL, Format format, 
                                int glInternalFormat, 
                                int glFormat, 
                                int glDataType){
         formatToGL[0][format.ordinal()] = new GLImageFormat(glInternalFormat, glFormat, glDataType);
     }
     
-    private static void formatSwiz(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void formatSwiz(GLImageFormat[][] formatToGL, Format format, 
                                    int glInternalFormat, 
                                    int glFormat, 
                                    int glDataType){
         formatToGL[0][format.ordinal()] = new GLImageFormat(glInternalFormat, glFormat, glDataType, false, true);
     }
     
-    private static void formatSrgb(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void formatSrgb(GLImageFormat[][] formatToGL, Format format, 
                                    int glInternalFormat, 
                                    int glFormat, 
                                    int glDataType)
@@ -67,7 +67,7 @@ public final class GLImageFormats {
         formatToGL[1][format.ordinal()] = new GLImageFormat(glInternalFormat, glFormat, glDataType);
     }
     
-    private static void formatSrgbSwiz(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void formatSrgbSwiz(GLImageFormat[][] formatToGL, Format format, 
                                        int glInternalFormat, 
                                        int glFormat, 
                                        int glDataType)
@@ -75,14 +75,14 @@ public final class GLImageFormats {
         formatToGL[1][format.ordinal()] = new GLImageFormat(glInternalFormat, glFormat, glDataType, false, true);
     }
     
-    private static void formatComp(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void formatComp(GLImageFormat[][] formatToGL, Format format, 
                                    int glCompressedFormat,
                                    int glFormat, 
                                    int glDataType){
         formatToGL[0][format.ordinal()] = new GLImageFormat(glCompressedFormat, glFormat, glDataType, true);
     }
     
-    private static void formatCompSrgb(GLImageFormat[][] formatToGL, Image.Format format, 
+    private static void formatCompSrgb(GLImageFormat[][] formatToGL, Format format, 
                                        int glCompressedFormat,
                                        int glFormat, 
                                        int glDataType)
@@ -101,7 +101,7 @@ public final class GLImageFormats {
      * @return An 2D array containing supported texture formats.
      */
     public static GLImageFormat[][] getFormatsForCaps(EnumSet<Caps> caps) {
-        GLImageFormat[][] formatToGL = new GLImageFormat[2][Image.Format.values().length];
+        GLImageFormat[][] formatToGL = new GLImageFormat[2][Format.values().length];
         
         // Core Profile Formats (supported by both OpenGL Core 3.3 and OpenGL ES 3.0+)
         if (caps.contains(Caps.CoreProfile)) {

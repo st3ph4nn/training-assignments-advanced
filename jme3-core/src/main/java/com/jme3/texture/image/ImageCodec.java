@@ -32,14 +32,14 @@
 package com.jme3.texture.image;
 
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import java.nio.ByteBuffer;
 import java.util.EnumMap;
 
 abstract class ImageCodec {
     
     public static final int FLAG_F16 = 1, FLAG_F32 = 2, FLAG_GRAY = 4; //, FLAG_ALPHAONLY = 8, FLAG_SHAREDEXP = 16;
-    private static final EnumMap<Image.Format, ImageCodec> params = new EnumMap<Image.Format, ImageCodec>(Image.Format.class);
+    private static final EnumMap<Format, ImageCodec> params = new EnumMap<Format, ImageCodec>(Format.class);
     
     protected final int bpp, type, maxAlpha, maxRed, maxGreen, maxBlue;
     protected final boolean isGray;

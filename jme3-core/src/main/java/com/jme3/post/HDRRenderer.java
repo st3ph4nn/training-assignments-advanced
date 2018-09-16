@@ -38,7 +38,7 @@ import com.jme3.renderer.*;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.MagFilter;
 import com.jme3.texture.Texture.MinFilter;
@@ -87,7 +87,7 @@ public class HDRRenderer implements SceneProcessor {
     private float whiteLevel = 100f;
     private float throttle = -1;
     private int maxIterations = -1;
-    private Image.Format bufFormat = Format.RGB16F;
+    private Format bufFormat = Format.RGB16F;
 
     private MinFilter fbMinFilter = MinFilter.BilinearNoMipMaps;
     private MagFilter fbMagFilter = MagFilter.Bilinear;

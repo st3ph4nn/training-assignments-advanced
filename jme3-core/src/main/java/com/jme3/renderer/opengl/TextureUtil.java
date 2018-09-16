@@ -35,7 +35,7 @@ import com.jme3.renderer.Caps;
 import com.jme3.renderer.RenderContext;
 import com.jme3.renderer.RendererException;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.texture.image.ColorSpace;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
@@ -239,7 +239,7 @@ final class TextureUtil {
                               boolean linearizeSrgb) {
 
         boolean getSrgbFormat = image.getColorSpace() == ColorSpace.sRGB && linearizeSrgb;
-        Image.Format jmeFormat = image.getFormat();
+        Format jmeFormat = image.getFormat();
         GLImageFormat oglFormat = getImageFormatWithError(jmeFormat, getSrgbFormat);
 
         ByteBuffer data = null;
@@ -304,7 +304,7 @@ final class TextureUtil {
             throw new UnsupportedOperationException("Updating multisampled images is not supported");
         }
         
-        Image.Format jmeFormat = image.getFormat();
+        Format jmeFormat = image.getFormat();
         
         if (jmeFormat.isCompressed()) {
             throw new UnsupportedOperationException("Updating compressed images is not supported");

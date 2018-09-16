@@ -46,7 +46,7 @@ import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.shader.VarType;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.texture.Texture;
 import java.io.IOException;
 import java.util.ArrayList;

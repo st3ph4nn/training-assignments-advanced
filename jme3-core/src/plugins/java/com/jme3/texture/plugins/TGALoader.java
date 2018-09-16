@@ -36,7 +36,7 @@ import com.jme3.asset.AssetLoader;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.FastMath;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.util.BufferUtils;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

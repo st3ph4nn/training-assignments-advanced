@@ -127,7 +127,7 @@ public class JmeSystem {
      * 
      * @param outStream The stream where to write the image data.
      * @param format The format to use, either "png" or "jpg".
-     * @param imageData The image data in {@link Image.Format#RGBA8} format.
+     * @param imageData The image data in {@link Format#RGBA8} format.
      * @param width The width of the image.
      * @param height The height of the image.
      * @throws IOException If outStream throws an exception while writing.

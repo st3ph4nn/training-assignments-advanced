@@ -31,7 +31,6 @@
  */
 package com.jme3.texture;
 
-import com.jme3.texture.Image.Format;
 import com.jme3.texture.image.ColorSpace;
 import java.util.Arrays;
 import java.util.List;

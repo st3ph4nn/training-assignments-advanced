@@ -39,6 +39,7 @@ import com.jme3.math.Vector4f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Format;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
@@ -102,7 +103,7 @@ public class EnvMapUtils {
      * @param format the format of the image
      * @return a cube map
      */
-    public static TextureCubeMap makeCubeMap(Image rightImg, Image leftImg, Image upImg, Image downImg, Image backImg, Image frontImg, Image.Format format) {
+    public static TextureCubeMap makeCubeMap(Image rightImg, Image leftImg, Image upImg, Image downImg, Image backImg, Image frontImg, Format format) {
         Image cubeImage = new Image(format, leftImg.getWidth(), leftImg.getHeight(), null, ColorSpace.Linear);
 
         cubeImage.addData(rightImg.getData(0));
@@ -601,7 +602,7 @@ public class EnvMapUtils {
     public static TextureCubeMap generateIrradianceMap(Vector3f[] shCoeffs, int targetMapSize, FixSeamsMethod fixSeamsMethod, TextureCubeMap store) {
         TextureCubeMap irrCubeMap = store;
         if (irrCubeMap == null) {
-            irrCubeMap = new TextureCubeMap(targetMapSize, targetMapSize, Image.Format.RGB16F);
+            irrCubeMap = new TextureCubeMap(targetMapSize, targetMapSize, Format.RGB16F);
             irrCubeMap.setMagFilter(Texture.MagFilter.Bilinear);
             irrCubeMap.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
             irrCubeMap.getImage().setColorSpace(ColorSpace.Linear);
@@ -656,7 +657,7 @@ public class EnvMapUtils {
     public static TextureCubeMap generatePrefilteredEnvMap(TextureCubeMap sourceEnvMap, int targetMapSize, FixSeamsMethod fixSeamsMethod, TextureCubeMap store) {
         TextureCubeMap pem = store;
         if (pem == null) {
-            pem = new TextureCubeMap(targetMapSize, targetMapSize, Image.Format.RGB16F);
+            pem = new TextureCubeMap(targetMapSize, targetMapSize, Format.RGB16F);
             pem.setMagFilter(Texture.MagFilter.Bilinear);
             pem.setMinFilter(Texture.MinFilter.Trilinear);
             pem.getImage().setColorSpace(ColorSpace.Linear);
@@ -918,7 +919,7 @@ public class EnvMapUtils {
      * @param imageFormat the format of the image
      * @return the initialized Irradiance map
      */
-    public static TextureCubeMap createIrradianceMap(int size, Image.Format imageFormat) {
+    public static TextureCubeMap createIrradianceMap(int size, Format imageFormat) {
 
         TextureCubeMap irrMap = new TextureCubeMap(size, size, imageFormat);
         irrMap.setMagFilter(Texture.MagFilter.Bilinear);
@@ -933,7 +934,7 @@ public class EnvMapUtils {
      * @param imageFormat the format of the image
      * @return the initialized prefiltered env map
      */
-    public static TextureCubeMap createPrefilteredEnvMap(int size, Image.Format imageFormat) {
+    public static TextureCubeMap createPrefilteredEnvMap(int size, Format imageFormat) {
 
         TextureCubeMap pem = new TextureCubeMap(size, size, imageFormat);
         pem.setMagFilter(Texture.MagFilter.Bilinear);

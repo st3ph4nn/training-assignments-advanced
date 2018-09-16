@@ -33,7 +33,7 @@ package com.jme3.texture;
 
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.util.NativeObject;
 import java.util.ArrayList;
 
@@ -93,7 +93,7 @@ public class FrameBuffer extends NativeObject {
     public class RenderBuffer {
 
         Texture tex;
-        Image.Format format;
+        Format format;
         int id = -1;
         int slot = SLOT_UNDEF;
         int face = -1;
@@ -213,7 +213,7 @@ public class FrameBuffer extends NativeObject {
      * @param format The format to use for the depth buffer.
      * @throws IllegalArgumentException If <code>format</code> is not a depth format.
      */
-    public void setDepthBuffer(Image.Format format){
+    public void setDepthBuffer(Format format){
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
@@ -231,7 +231,7 @@ public class FrameBuffer extends NativeObject {
      * @param format The format to use for the color buffer.
      * @throws IllegalArgumentException If <code>format</code> is not a color format.
      */
-    public void setColorBuffer(Image.Format format){
+    public void setColorBuffer(Format format){
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
@@ -373,7 +373,7 @@ public class FrameBuffer extends NativeObject {
      * @param format the format of the color buffer
 	 * @see #addColorTexture(com.jme3.texture.Texture2D) 
      */
-	public void addColorBuffer(Image.Format format){
+	public void addColorBuffer(Format format){
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
@@ -395,7 +395,7 @@ public class FrameBuffer extends NativeObject {
      * is rendered to by the shader.
      * 
      * @param tex The texture to add.
-	 * @see #addColorBuffer(com.jme3.texture.Image.Format) 
+	 * @see #addColorBuffer(com.jme3.texture.Format) 
      */
     public void addColorTexture(Texture2D tex) {
         if (id != -1)

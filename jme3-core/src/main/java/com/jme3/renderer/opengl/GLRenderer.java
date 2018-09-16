@@ -1826,7 +1826,7 @@ public final class GLRenderer implements Renderer {
         gl.glReadPixels(vpX, vpY, vpW, vpH, glFormat, dataType, byteBuf);
     }
 
-    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, Image.Format format) {
+    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, com.jme3.texture.Format format) {
         GLImageFormat glFormat = texUtil.getImageFormatWithError(format, false);
         readFrameBufferWithGLFormat(fb, byteBuf, glFormat.format, glFormat.dataType);
     }
@@ -2863,4 +2863,7 @@ public final class GLRenderer implements Renderer {
             linearizeSrgbImages = linearize;
         }
     }
+    
+
+
 }

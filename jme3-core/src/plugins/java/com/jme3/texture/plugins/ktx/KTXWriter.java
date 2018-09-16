@@ -34,6 +34,7 @@ package com.jme3.texture.plugins.ktx;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.opengl.GLImageFormat;
 import com.jme3.renderer.opengl.GLImageFormats;
+import com.jme3.texture.Format;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
@@ -261,7 +262,7 @@ public class KTXWriter {
      * @param format
      * @return 
      */
-    private GLImageFormat getGlFormat(Image.Format format) {
+    private GLImageFormat getGlFormat(Format format) {
         EnumSet<Caps> caps = EnumSet.allOf(Caps.class);
         GLImageFormat[][] formats = GLImageFormats.getFormatsForCaps(caps);
         return formats[0][format.ordinal()];

@@ -35,7 +35,7 @@ import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetLoader;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
 import com.jme3.texture.Texture;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
@@ -264,18 +264,18 @@ public class DDSLoader implements AssetLoader {
                 case PF_DXT1:
                     bpp = 4;
                     if (is(pfFlags, DDPF_ALPHAPIXELS)) {
-                        pixelFormat = Image.Format.DXT1A;
+                        pixelFormat = Format.DXT1A;
                     } else {
-                        pixelFormat = Image.Format.DXT1;
+                        pixelFormat = Format.DXT1;
                     }
                     break;
                 case PF_DXT3:
                     bpp = 8;
-                    pixelFormat = Image.Format.DXT3;
+                    pixelFormat = Format.DXT3;
                     break;
                 case PF_DXT5:
                     bpp = 8;
-                    pixelFormat = Image.Format.DXT5;
+                    pixelFormat = Format.DXT5;
                     if (swizzle == SWIZZLE_xGxR) {
                         normal = true;
                     }
@@ -283,11 +283,11 @@ public class DDSLoader implements AssetLoader {
                 /*
                 case PF_ATI1:
                     bpp = 4;
-                    pixelFormat = Image.Format.LTC;
+                    pixelFormat = Format.LTC;
                     break;
                 case PF_ATI2:
                     bpp = 8;
-                    pixelFormat = Image.Format.LATC;
+                    pixelFormat = Format.LATC;
                     break;
                 */
                 case PF_DX10:
@@ -300,7 +300,7 @@ public class DDSLoader implements AssetLoader {
                 case 113:
                     compressed = false;
                     bpp = 64;
-                    pixelFormat = Image.Format.RGBA16F;
+                    pixelFormat = Format.RGBA16F;
                     break;
                 default:
                     throw new IOException("Unknown fourcc: " + string(fourcc) + ", " + Integer.toHexString(fourcc));

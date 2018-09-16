@@ -38,6 +38,7 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Format;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
@@ -230,7 +231,7 @@ public interface Renderer {
      * @param byteBuf The bytebuffer to transfer color data to
      * @param format the image format to use when reading the frameBuffer.
      */
-    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, Image.Format format);
+    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, Format format);
 
     /**
      * Deletes a framebuffer and all attached renderbuffers
@@ -366,14 +367,14 @@ public interface Renderer {
       * set shall undergo an sRGB to linear RGB color conversion when read by a shader.
       *
       * The conversion is performed for the following formats:
-      *  - {@link Image.Format#RGB8}
-      *  - {@link Image.Format#RGBA8}
-      *  - {@link Image.Format#Luminance8}
-      *  - {@link Image.Format#Luminance8Alpha8}
-      *  - {@link Image.Format#DXT1}
-      *  - {@link Image.Format#DXT1A}
-      *  - {@link Image.Format#DXT3}
-      *  - {@link Image.Format#DXT5}
+      *  - {@link Format#RGB8}
+      *  - {@link Format#RGBA8}
+      *  - {@link Format#Luminance8}
+      *  - {@link Format#Luminance8Alpha8}
+      *  - {@link Format#DXT1}
+      *  - {@link Format#DXT1A}
+      *  - {@link Format#DXT3}
+      *  - {@link Format#DXT5}
       * 
       * For all other formats, no conversion is performed.
       *

@@ -79,12 +79,12 @@ public class TextureCubeMap extends Texture {
         setImage(img);
     }
     
-    public TextureCubeMap(int width, int height, Image.Format format){
+    public TextureCubeMap(int width, int height, Format format){
         this(createEmptyLayeredImage(width, height, 6, format));
     }
 
     private static Image createEmptyLayeredImage(int width, int height,
-            int layerCount, Image.Format format) {
+            int layerCount, Format format) {
         ArrayList<ByteBuffer> layers = new ArrayList<ByteBuffer>();
         for(int i = 0; i < layerCount; i++) {
             layers.add(null);
