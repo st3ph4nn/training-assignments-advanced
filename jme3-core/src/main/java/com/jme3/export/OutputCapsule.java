@@ -31,6 +31,7 @@
  */
 package com.jme3.export;
 
+import com.jme3.texture.Image;
 import com.jme3.util.IntMap;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -154,4 +155,6 @@ public interface OutputCapsule {
     // enums
 
     public void write(Enum value, String name, Enum defVal) throws IOException;
+    
+	public void write(Image image, String name, Object object);
 }

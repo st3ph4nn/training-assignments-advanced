@@ -584,6 +584,7 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
     @Deprecated
     public abstract Texture createSimpleClone();
 
+    @Override
     public void write(JmeExporter e) throws IOException {
         OutputCapsule capsule = e.getCapsule(this);
         capsule.write(name, "name", null);
