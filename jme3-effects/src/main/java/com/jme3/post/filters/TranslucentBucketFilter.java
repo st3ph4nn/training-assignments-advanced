@@ -43,6 +43,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import java.util.logging.Level;
@@ -58,7 +59,7 @@ public final class TranslucentBucketFilter extends Filter {
     private final static Logger logger = Logger.getLogger(TranslucentBucketFilter.class.getName());
     private RenderManager renderManager;
     private boolean enabledSoftParticles = false;
-    private Texture depthTexture;
+    private ITexture depthTexture;
     private ViewPort viewPort;
 
     public TranslucentBucketFilter() {

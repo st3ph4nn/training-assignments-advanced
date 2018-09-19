@@ -56,7 +56,7 @@ import java.util.logging.Logger;
  * @author Joshua Slack
  * @version $Id: Texture.java 4131 2009-03-19 20:15:28Z blaine.dev $
  */
-public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable {
+public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable, ITexture {
 
     public enum Type {
 
@@ -337,20 +337,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
     public Texture() {
     }
 
-    /**
-     * @return the MinificationFilterMode of this texture.
-     */
-    public MinFilter getMinFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getMinFilter()
+	 */
+    @Override
+	public MinFilter getMinFilter() {
         return minificationFilter;
     }
 
-    /**
-     * @param minificationFilter
-     *            the new MinificationFilterMode for this texture.
-     * @throws IllegalArgumentException
-     *             if minificationFilter is null
-     */
-    public void setMinFilter(MinFilter minificationFilter) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setMinFilter(com.jme3.texture.Texture.MinFilter)
+	 */
+    @Override
+	public void setMinFilter(MinFilter minificationFilter) {
         if (minificationFilter == null) {
             throw new IllegalArgumentException(
                     "minificationFilter can not be null.");
@@ -361,20 +360,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         }
     }
 
-    /**
-     * @return the MagnificationFilterMode of this texture.
-     */
-    public MagFilter getMagFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getMagFilter()
+	 */
+    @Override
+	public MagFilter getMagFilter() {
         return magnificationFilter;
     }
 
-    /**
-     * @param magnificationFilter
-     *            the new MagnificationFilter for this texture.
-     * @throws IllegalArgumentException
-     *             if magnificationFilter is null
-     */
-    public void setMagFilter(MagFilter magnificationFilter) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setMagFilter(com.jme3.texture.Texture.MagFilter)
+	 */
+    @Override
+	public void setMagFilter(MagFilter magnificationFilter) {
         if (magnificationFilter == null) {
             throw new IllegalArgumentException(
                     "magnificationFilter can not be null.");
@@ -382,22 +380,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         this.magnificationFilter = magnificationFilter;
     }
 
-    /**
-     * @return The ShadowCompareMode of this texture.
-     * @see ShadowCompareMode
-     */
-    public ShadowCompareMode getShadowCompareMode(){
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getShadowCompareMode()
+	 */
+    @Override
+	public ShadowCompareMode getShadowCompareMode(){
         return shadowCompareMode;
     }
 
-    /**
-     * @param compareMode
-     *            the new ShadowCompareMode for this texture.
-     * @throws IllegalArgumentException
-     *             if compareMode is null
-     * @see ShadowCompareMode
-     */
-    public void setShadowCompareMode(ShadowCompareMode compareMode){
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setShadowCompareMode(com.jme3.texture.Texture.ShadowCompareMode)
+	 */
+    @Override
+	public void setShadowCompareMode(ShadowCompareMode compareMode){
         if (compareMode == null){
             throw new IllegalArgumentException(
                     "compareMode can not be null.");
@@ -484,20 +479,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         this.name = name;
     }
 
-    /**
-     * @return the anisotropic filtering level for this texture. Default value
-     * is 0 (use value from config), 
-     * 1 means 1x (no anisotropy), 2 means x2, 4 is x4, etc.
-     */
-    public int getAnisotropicFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getAnisotropicFilter()
+	 */
+    @Override
+	public int getAnisotropicFilter() {
         return anisotropicFilter;
     }
 
-    /**
-     * @param level
-     *            the anisotropic filtering level for this texture.
-     */
-    public void setAnisotropicFilter(int level) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setAnisotropicFilter(int)
+	 */
+    @Override
+	public void setAnisotropicFilter(int level) {
         anisotropicFilter = Math.max(0, level);
     }
 
@@ -559,15 +553,12 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         return hash;
     }
 
-   /** Retrieve a basic clone of this Texture (ie, clone everything but the
-     * image data, which is shared)
-     *
-     * @return Texture
-     * 
-     * @deprecated Use {@link Texture#clone()} instead.
-     */
-    @Deprecated
-    public Texture createSimpleClone(Texture rVal) {
+   /* (non-Javadoc)
+ * @see com.jme3.texture.ITexture#createSimpleClone(com.jme3.texture.Texture)
+ */
+    @Override
+	@Deprecated
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setMinFilter(minificationFilter);
         rVal.setMagFilter(magnificationFilter);
         rVal.setShadowCompareMode(shadowCompareMode);
@@ -582,7 +573,7 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
      * @deprecated Use {@link Texture#clone()} instead.
      */
     @Deprecated
-    public abstract Texture createSimpleClone();
+    public abstract ITexture createSimpleClone();
 
     @Override
     public void write(JmeExporter e) throws IOException {

@@ -93,12 +93,12 @@ public class TextureCubeMap extends Texture {
         return image;
     }
 
-    public Texture createSimpleClone() {
+    public ITexture createSimpleClone() {
         return createSimpleClone(new TextureCubeMap());
     }
 
     @Override
-    public Texture createSimpleClone(Texture rVal) {
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setWrap(WrapAxis.S, wrapS);
         rVal.setWrap(WrapAxis.T, wrapT);
         rVal.setWrap(WrapAxis.R, wrapR);

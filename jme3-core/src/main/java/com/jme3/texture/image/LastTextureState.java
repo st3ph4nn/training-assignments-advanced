@@ -32,6 +32,7 @@
 package com.jme3.texture.image;
 
 import com.jme3.renderer.Renderer;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 
 /**
@@ -62,6 +63,6 @@ public final class LastTextureState {
         
         // The default in OpenGL is OFF, so we avoid setting this per texture
         // if its not used.
-        shadowCompareMode = Texture.ShadowCompareMode.Off;
+        shadowCompareMode = ITexture.ShadowCompareMode.Off;
     }
 }

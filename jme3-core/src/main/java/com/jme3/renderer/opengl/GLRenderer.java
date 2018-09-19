@@ -77,6 +77,7 @@ import com.jme3.shader.Shader.ShaderType;
 import com.jme3.shader.Uniform;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.FrameBuffer.RenderBuffer;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.ShadowCompareMode;
@@ -2084,15 +2085,15 @@ public final class GLRenderer implements Renderer {
         switch (tex.getType()) {
             case CubeMap:
             case ThreeDimensional:
-                if (tex.getWrap(WrapAxis.R) != Texture.WrapMode.EdgeClamp) {
+                if (tex.getWrap(WrapAxis.R) != ITexture.WrapMode.EdgeClamp) {
                     throw new RendererException("repeating non-power-of-2 textures "
                             + "are not supported by the video hardware");
                 }
                 // fallthrough intentional!!!
             case TwoDimensionalArray:
             case TwoDimensional:
-                if (tex.getWrap(WrapAxis.S) != Texture.WrapMode.EdgeClamp
-                        || tex.getWrap(WrapAxis.T) != Texture.WrapMode.EdgeClamp) {
+                if (tex.getWrap(WrapAxis.S) != ITexture.WrapMode.EdgeClamp
+                        || tex.getWrap(WrapAxis.T) != ITexture.WrapMode.EdgeClamp) {
                     throw new RendererException("repeating non-power-of-2 textures "
                             + "are not supported by the video hardware");
                 }

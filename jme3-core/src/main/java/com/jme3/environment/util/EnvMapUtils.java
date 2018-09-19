@@ -40,8 +40,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Format;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
-import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
@@ -129,9 +129,9 @@ public class EnvMapUtils {
 
         TextureCubeMap cubeMap = new TextureCubeMap(cubeImage);
         cubeMap.setAnisotropicFilter(0);
-        cubeMap.setMagFilter(Texture.MagFilter.Bilinear);
-        cubeMap.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
-        cubeMap.setWrap(Texture.WrapMode.EdgeClamp);
+        cubeMap.setMagFilter(ITexture.MagFilter.Bilinear);
+        cubeMap.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
+        cubeMap.setWrap(ITexture.WrapMode.EdgeClamp);
 
         return cubeMap;
     }
@@ -169,7 +169,7 @@ public class EnvMapUtils {
         cubeMap.setAnisotropicFilter(sourceMap.getAnisotropicFilter());
         cubeMap.setMagFilter(sourceMap.getMagFilter());
         cubeMap.setMinFilter(sourceMap.getMinFilter());
-        cubeMap.setWrap(sourceMap.getWrap(Texture.WrapAxis.S));
+        cubeMap.setWrap(sourceMap.getWrap(ITexture.WrapAxis.S));
 
         return cubeMap;
     }
@@ -603,8 +603,8 @@ public class EnvMapUtils {
         TextureCubeMap irrCubeMap = store;
         if (irrCubeMap == null) {
             irrCubeMap = new TextureCubeMap(targetMapSize, targetMapSize, Format.RGB16F);
-            irrCubeMap.setMagFilter(Texture.MagFilter.Bilinear);
-            irrCubeMap.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
+            irrCubeMap.setMagFilter(ITexture.MagFilter.Bilinear);
+            irrCubeMap.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
             irrCubeMap.getImage().setColorSpace(ColorSpace.Linear);
         }
 
@@ -658,8 +658,8 @@ public class EnvMapUtils {
         TextureCubeMap pem = store;
         if (pem == null) {
             pem = new TextureCubeMap(targetMapSize, targetMapSize, Format.RGB16F);
-            pem.setMagFilter(Texture.MagFilter.Bilinear);
-            pem.setMinFilter(Texture.MinFilter.Trilinear);
+            pem.setMagFilter(ITexture.MagFilter.Bilinear);
+            pem.setMinFilter(ITexture.MinFilter.Trilinear);
             pem.getImage().setColorSpace(ColorSpace.Linear);
         }
 
@@ -922,8 +922,8 @@ public class EnvMapUtils {
     public static TextureCubeMap createIrradianceMap(int size, Format imageFormat) {
 
         TextureCubeMap irrMap = new TextureCubeMap(size, size, imageFormat);
-        irrMap.setMagFilter(Texture.MagFilter.Bilinear);
-        irrMap.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
+        irrMap.setMagFilter(ITexture.MagFilter.Bilinear);
+        irrMap.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
         irrMap.getImage().setColorSpace(ColorSpace.Linear);
         return irrMap;
     }
@@ -937,8 +937,8 @@ public class EnvMapUtils {
     public static TextureCubeMap createPrefilteredEnvMap(int size, Format imageFormat) {
 
         TextureCubeMap pem = new TextureCubeMap(size, size, imageFormat);
-        pem.setMagFilter(Texture.MagFilter.Bilinear);
-        pem.setMinFilter(Texture.MinFilter.Trilinear);
+        pem.setMagFilter(ITexture.MagFilter.Bilinear);
+        pem.setMinFilter(ITexture.MinFilter.Trilinear);
         pem.getImage().setColorSpace(ColorSpace.Linear);
         int nbMipMap = (int) (Math.log(size) / Math.log(2) - 1);
         CubeMapWrapper targetWrapper = new CubeMapWrapper(pem);

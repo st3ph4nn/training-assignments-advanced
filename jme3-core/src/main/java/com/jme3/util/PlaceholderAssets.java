@@ -40,6 +40,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.image.ColorSpace;
 import java.nio.ByteBuffer;
@@ -85,7 +86,7 @@ public class PlaceholderAssets {
     public static Material getPlaceholderMaterial(AssetManager assetManager){
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         Texture tex = assetManager.loadTexture("Common/Textures/MissingMaterial.png");
-        tex.setWrap(Texture.WrapMode.Repeat);
+        tex.setWrap(ITexture.WrapMode.Repeat);
         mat.setTexture("ColorMap", tex);
         return mat;
     }
@@ -97,7 +98,7 @@ public class PlaceholderAssets {
         Geometry geom = new Geometry("placeholder", box);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         Texture tex = assetManager.loadTexture("Common/Textures/MissingModel.png");
-        tex.setWrap(Texture.WrapMode.Repeat);
+        tex.setWrap(ITexture.WrapMode.Repeat);
         mat.setTexture("ColorMap", tex);
         geom.setMaterial(mat);
         return geom;

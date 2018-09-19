@@ -94,14 +94,14 @@ public class TextureArray extends Texture {
     }
 
     @Override
-    public Texture createSimpleClone() {
+    public ITexture createSimpleClone() {
         TextureArray clone = new TextureArray();
         createSimpleClone(clone);
         return clone;
     }
 
     @Override
-    public Texture createSimpleClone(Texture rVal) {
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setWrap(WrapAxis.S, wrapS);
         rVal.setWrap(WrapAxis.T, wrapT);
         return super.createSimpleClone(rVal);

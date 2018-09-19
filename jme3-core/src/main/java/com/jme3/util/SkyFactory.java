@@ -42,6 +42,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.TextureCubeMap;
 import java.nio.ByteBuffer;
@@ -205,10 +206,10 @@ public class SkyFactory {
                 skyMat.setBoolean("EquirectMap", true);
                 break;
         }
-        texture.setMagFilter(Texture.MagFilter.Bilinear);
-        texture.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
+        texture.setMagFilter(ITexture.MagFilter.Bilinear);
+        texture.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
         texture.setAnisotropicFilter(0);
-        texture.setWrap(Texture.WrapMode.EdgeClamp);
+        texture.setWrap(ITexture.WrapMode.EdgeClamp);
         skyMat.setTexture("Texture", texture);
         sky.setMaterial(skyMat);
 
@@ -287,7 +288,7 @@ public class SkyFactory {
         TextureKey key = new TextureKey(textureName, true);
         key.setGenerateMips(false);
         if (envMapType == EnvMapType.CubeMap) {
-            key.setTextureTypeHint(Texture.Type.CubeMap);
+            key.setTextureTypeHint(ITexture.Type.CubeMap);
         }
         Texture tex = assetManager.loadTexture(key);
         return createSky(assetManager, tex, envMapType);
