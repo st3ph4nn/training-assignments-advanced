@@ -49,6 +49,7 @@ import com.jme3.shader.VarType;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.WrapAxis;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.PlaceholderAssets;
 import com.jme3.util.blockparser.BlockLanguageParser;
@@ -858,7 +859,7 @@ public class J3MLoader implements AssetLoader {
                 if (separatorPosition >= option.length() - 2) {
                     final String axis = option.substring(separatorPosition + 1);
                     final String mode = option.substring(0, separatorPosition);
-                    final Texture.WrapAxis wrapAxis = ITexture.WrapAxis.valueOf(axis);
+                    final WrapAxis wrapAxis = ITexture.WrapAxis.valueOf(axis);
                     texture.setWrap(wrapAxis, ITexture.WrapMode.valueOf(mode));
                 } else {
                     texture.setWrap(ITexture.WrapMode.valueOf(option));

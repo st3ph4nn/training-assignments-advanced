@@ -33,7 +33,10 @@ package com.jme3.texture.image;
 
 import com.jme3.renderer.Renderer;
 import com.jme3.texture.ITexture;
-import com.jme3.texture.Texture;
+import com.jme3.texture.MagFilter;
+import com.jme3.texture.MinFilter;
+import com.jme3.texture.ShadowCompareMode;
+import com.jme3.texture.WrapMode;
 
 /**
  * Stores / caches texture state parameters so they don't have to be set 
@@ -43,11 +46,11 @@ import com.jme3.texture.Texture;
  */
 public final class LastTextureState {
     
-    public Texture.WrapMode sWrap, tWrap, rWrap;
-    public Texture.MagFilter magFilter;
-    public Texture.MinFilter minFilter;
+    public WrapMode sWrap, tWrap, rWrap;
+    public MagFilter magFilter;
+    public MinFilter minFilter;
     public int anisoFilter;
-    public Texture.ShadowCompareMode shadowCompareMode;
+    public ShadowCompareMode shadowCompareMode;
     
     public LastTextureState() {
         reset();

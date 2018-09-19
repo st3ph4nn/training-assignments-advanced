@@ -31,7 +31,6 @@
  */
 package com.jme3.asset;
 
-import com.jme3.texture.Texture.Type;
 import com.jme3.asset.cache.AssetCache;
 import com.jme3.asset.cache.WeakRefCloneAssetCache;
 import com.jme3.export.InputCapsule;
@@ -42,6 +41,8 @@ import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.texture.TextureProcessor;
+import com.jme3.texture.Type;
+
 import java.io.IOException;
 
 /**
@@ -60,7 +61,7 @@ public class TextureKey extends AssetKey<Texture> {
     private boolean generateMips;
     private boolean flipY;
     private int anisotropy;
-    private Texture.Type textureTypeHint = ITexture.Type.TwoDimensional;
+    private Type textureTypeHint = ITexture.Type.TwoDimensional;
 
     public TextureKey(String name, boolean flipY) {
         super(name);
@@ -214,7 +215,7 @@ public class TextureKey extends AssetKey<Texture> {
             // Backwards compat
             textureTypeHint = Type.CubeMap;
         } else {
-            textureTypeHint = ic.readEnum("tex_type", Texture.Type.class, Type.TwoDimensional);
+            textureTypeHint = ic.readEnum("tex_type", Type.class, Type.TwoDimensional);
         }
     }
 }

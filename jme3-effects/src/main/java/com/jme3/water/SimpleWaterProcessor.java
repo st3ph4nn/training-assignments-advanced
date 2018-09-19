@@ -46,8 +46,8 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Format;
-import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.WrapMode;
 import com.jme3.ui.Picture;
 import com.jme3.util.TempVars;
 

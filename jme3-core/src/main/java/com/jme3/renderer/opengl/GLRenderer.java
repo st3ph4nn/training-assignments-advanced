@@ -79,9 +79,12 @@ import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.FrameBuffer.RenderBuffer;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
+import com.jme3.texture.MagFilter;
+import com.jme3.texture.MinFilter;
+import com.jme3.texture.ShadowCompareMode;
 import com.jme3.texture.Texture;
-import com.jme3.texture.Texture.ShadowCompareMode;
-import com.jme3.texture.Texture.WrapAxis;
+import com.jme3.texture.WrapAxis;
+import com.jme3.texture.WrapMode;
 import com.jme3.texture.image.LastTextureState;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.ListMap;
@@ -1863,7 +1866,7 @@ public final class GLRenderer implements Renderer {
     /*********************************************************************\
      |* Textures                                                          *|
      \*********************************************************************/
-    private int convertTextureType(Texture.Type type, int samples, int face) {
+    private int convertTextureType(Type type, int samples, int face) {
         if (samples > 1 && !caps.contains(Caps.TextureMultisample)) {
             throw new RendererException("Multisample textures are not supported" +
                     " by the video hardware.");
@@ -1905,7 +1908,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertMagFilter(Texture.MagFilter filter) {
+    private int convertMagFilter(MagFilter filter) {
         switch (filter) {
             case Bilinear:
                 return GLConstants.GL_LINEAR;
@@ -1916,7 +1919,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertMinFilter(Texture.MinFilter filter, boolean haveMips) {
+    private int convertMinFilter(MinFilter filter, boolean haveMips) {
         if (haveMips){
             switch (filter) {
                 case Trilinear:
@@ -1950,7 +1953,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertWrapMode(Texture.WrapMode mode) {
+    private int convertWrapMode(WrapMode mode) {
         switch (mode) {
             case BorderClamp:
             case Clamp:
@@ -2156,7 +2159,7 @@ public final class GLRenderer implements Renderer {
      * @param scaleToPot If true, the image will be scaled to power-of-2 dimensions
      * before being uploaded.
      */
-    public void updateTexImageData(Image img, Texture.Type type, int unit, boolean scaleToPot) {
+    public void updateTexImageData(Image img, Type type, int unit, boolean scaleToPot) {
         int texId = img.getId();
         if (texId == -1) {
             // create texture
