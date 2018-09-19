@@ -50,8 +50,8 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.scene.Geometry;
 import com.jme3.shader.DefineList;
+import com.jme3.shader.IUniform;
 import com.jme3.shader.Shader;
-import com.jme3.shader.Uniform;
 import com.jme3.shader.VarType;
 import com.jme3.util.TempVars;
 import java.util.EnumSet;
@@ -75,10 +75,10 @@ public final class MultiPassLightingLogic extends DefaultTechniqueDefLogic {
     @Override
     public void render(RenderManager renderManager, Shader shader, Geometry geometry, LightList lights, int lastTexUnit) {
         Renderer r = renderManager.getRenderer();
-        Uniform lightDir = shader.getUniform("g_LightDirection");
-        Uniform lightColor = shader.getUniform("g_LightColor");
-        Uniform lightPos = shader.getUniform("g_LightPosition");
-        Uniform ambientColor = shader.getUniform("g_AmbientLightColor");
+        IUniform lightDir = shader.getUniform("g_LightDirection");
+        IUniform lightColor = shader.getUniform("g_LightColor");
+        IUniform lightPos = shader.getUniform("g_LightPosition");
+        IUniform ambientColor = shader.getUniform("g_AmbientLightColor");
         boolean isFirstLight = true;
         boolean isSecondLight = false;
         

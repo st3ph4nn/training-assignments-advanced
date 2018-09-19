@@ -334,7 +334,7 @@ public final class Shader extends NativeObject {
     public void clearUniformsSetByCurrentFlag() {
         int size = uniforms.size();
         for (int i = 0; i < size; i++) {
-            Uniform u = uniforms.getValue(i);
+            IUniform u = uniforms.getValue(i);
             u.clearSetByCurrentMaterial();
         }
     }
@@ -362,7 +362,7 @@ public final class Shader extends NativeObject {
     public void resetLocations() {
         if (uniforms != null) {
             // NOTE: Shader sources will be reset seperately from the shader itself.
-            for (Uniform uniform : uniforms.values()) {
+            for (IUniform uniform : uniforms.values()) {
                 uniform.reset(); // fixes issue with re-initialization
             }
         }

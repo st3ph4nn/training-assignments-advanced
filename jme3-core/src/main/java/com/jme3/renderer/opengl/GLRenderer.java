@@ -70,6 +70,7 @@ import com.jme3.scene.VertexBuffer.Format;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.VertexBuffer.Usage;
 import com.jme3.shader.Attribute;
+import com.jme3.shader.IUniform;
 import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.shader.Shader.ShaderType;
@@ -1140,7 +1141,7 @@ public final class GLRenderer implements Renderer {
     protected void resetUniformLocations(Shader shader) {
         ListMap<String, Uniform> uniforms = shader.getUniformMap();
         for (int i = 0; i < uniforms.size(); i++) {
-            Uniform uniform = uniforms.getValue(i);
+            IUniform uniform = uniforms.getValue(i);
             uniform.reset(); // e.g check location again
         }
     }
