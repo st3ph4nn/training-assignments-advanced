@@ -47,7 +47,7 @@ public class TextureProcessor implements AssetProcessor {
         }
 
         Texture tex;
-        if (texKey.getTextureTypeHint() == ITexture.Type.CubeMap) {
+        if (texKey.getTextureTypeHint() == Type.CubeMap) {
             if (texKey.isFlipY()) {
                 // also flip -y and +y image in cubemap
                 ByteBuffer pos_y = img.getData(2);
@@ -55,7 +55,7 @@ public class TextureProcessor implements AssetProcessor {
                 img.setData(3, pos_y);
             }
             tex = new TextureCubeMap();
-        } else if (texKey.getTextureTypeHint() == ITexture.Type.ThreeDimensional) {
+        } else if (texKey.getTextureTypeHint() == Type.ThreeDimensional) {
             tex = new Texture3D();
         } else {
             tex = new Texture2D();
@@ -64,7 +64,7 @@ public class TextureProcessor implements AssetProcessor {
         // enable mipmaps if image has them
         // or generate them if requested by user
         if (img.hasMipmaps() || texKey.isGenerateMips()) {
-            tex.setMinFilter(ITexture.MinFilter.Trilinear);
+            tex.setMinFilter(MinFilter.Trilinear);
         }
 
         tex.setAnisotropicFilter(texKey.getAnisotropy());

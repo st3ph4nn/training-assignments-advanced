@@ -66,6 +66,6 @@ public final class LastTextureState {
         
         // The default in OpenGL is OFF, so we avoid setting this per texture
         // if its not used.
-        shadowCompareMode = ITexture.ShadowCompareMode.Off;
+        shadowCompareMode = ShadowCompareMode.Off;
     }
 }

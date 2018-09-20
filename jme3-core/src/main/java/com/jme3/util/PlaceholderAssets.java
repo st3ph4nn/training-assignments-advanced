@@ -40,6 +40,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.image.ColorSpace;
@@ -73,7 +74,7 @@ public class PlaceholderAssets {
     };
     
     @Deprecated
-    public static Image getPlaceholderImage(){
+    public static IImage getPlaceholderImage(){
         ByteBuffer tempData = BufferUtils.createByteBuffer(3 * 4 * 4);
         tempData.put(imageData).flip();
         return new Image(Format.RGB8, 4, 4, tempData, null, ColorSpace.Linear);

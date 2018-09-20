@@ -59,7 +59,7 @@ import java.util.List;
  * @author Joshua Slack
  * @version $Id: Image.java 4131 2009-03-19 20:15:28Z blaine.dev $
  */
-public class Image extends NativeObject /* , Cloneable */ {
+public class Image extends NativeObject /* , Cloneable */ implements IImage {
 
 	// image attributes
 	protected Format format;
@@ -388,6 +388,10 @@ public class Image extends NativeObject /* , Cloneable */ {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#addData(java.nio.ByteBuffer)
+	 */
+	@Override
 	public void addData(ByteBuffer data) {
 		if (this.data == null)
 			this.data = new ArrayList<ByteBuffer>(1);
@@ -591,9 +595,10 @@ public class Image extends NativeObject /* , Cloneable */ {
 		return colorSpace;
 	}
 
-	/**
-	 * @return A shallow clone of this image. The data is not cloned.
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#clone()
 	 */
+	@Override
 	public Image clone() {
 		Image clone = (Image) super.clone();
 		clone.mipMapSizes = mipMapSizes != null ? mipMapSizes.clone() : null;
@@ -607,6 +612,9 @@ public class Image extends NativeObject /* , Cloneable */ {
 	 * Sets the update needed flag, while also checking if mipmaps need to be
 	 * regenerated.
 	 */
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#setUpdateNeeded()
+	 */
 	@Override
 	public void setUpdateNeeded() {
 		super.setUpdateNeeded();
@@ -616,6 +624,9 @@ public class Image extends NativeObject /* , Cloneable */ {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#resetObject()
+	 */
 	@Override
 	public void resetObject() {
 		this.id = -1;
@@ -631,21 +642,33 @@ public class Image extends NativeObject /* , Cloneable */ {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#deleteObject(java.lang.Object)
+	 */
 	@Override
 	public void deleteObject(Object rendererObject) {
 		((Renderer) rendererObject).deleteImage(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#createDestructableClone()
+	 */
 	@Override
 	public NativeObject createDestructableClone() {
 		return new Image(id);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#getUniqueId()
+	 */
 	@Override
 	public long getUniqueId() {
 		return ((long) OBJTYPE_TEXTURE << 32) | ((long) id);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#toString()
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -668,6 +691,9 @@ public class Image extends NativeObject /* , Cloneable */ {
 		return sb.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if (other == this) {
@@ -697,6 +723,9 @@ public class Image extends NativeObject /* , Cloneable */ {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jme3.texture.IImage#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		int hash = 7;

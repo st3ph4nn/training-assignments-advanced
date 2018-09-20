@@ -40,6 +40,7 @@ import com.jme3.opencl.Image.ImageFormat;
 import com.jme3.opencl.Image.ImageType;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Type;
 
@@ -217,7 +218,7 @@ public abstract class Context extends AbstractOpenCLObject {
      * @param access the allowed memory access for kernels
      * @return the OpenCL image
      */
-    public abstract Image bindImage(com.jme3.texture.Image image, Type textureType, int miplevel, MemoryAccess access);
+    public abstract Image bindImage(IImage image, Type textureType, int miplevel, MemoryAccess access);
     /**
      * Creates a shared image object from a jME3 texture.
      * The returned image shares the same memory with the jME3 texture, changes

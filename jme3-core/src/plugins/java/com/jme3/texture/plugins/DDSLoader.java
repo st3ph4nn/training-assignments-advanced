@@ -36,6 +36,7 @@ import com.jme3.asset.AssetLoader;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
@@ -141,7 +142,7 @@ public class DDSLoader implements AssetLoader {
         }
     }
 
-    public Image load(InputStream stream) throws IOException {
+    public IImage load(InputStream stream) throws IOException {
         in = new LittleEndien(stream);
         loadHeader();
         ArrayList<ByteBuffer> data = readData(false);

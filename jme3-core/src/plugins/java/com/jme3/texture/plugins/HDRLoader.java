@@ -37,6 +37,7 @@ import com.jme3.asset.TextureKey;
 import com.jme3.math.FastMath;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
 import java.io.IOException;
@@ -219,7 +220,7 @@ public class HDRLoader implements AssetLoader {
         }
     }
 
-    public Image load(InputStream in, boolean flipY) throws IOException{
+    public IImage load(InputStream in, boolean flipY) throws IOException{
         float gamma = -1f;
         float exposure = -1f;
         float[] colorcorr = new float[]{ -1f, -1f, -1f };
@@ -321,7 +322,7 @@ public class HDRLoader implements AssetLoader {
         InputStream in = null;
         try {
             in = info.openStream();
-            Image img = load(in, flip);
+            IImage img = load(in, flip);
             return img;
         } finally {
             if (in != null){

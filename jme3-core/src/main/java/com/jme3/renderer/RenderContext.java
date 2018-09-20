@@ -37,7 +37,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.shader.Shader;
 import com.jme3.texture.FrameBuffer;
-import com.jme3.texture.Image;
+import com.jme3.texture.IImage;
 
 /**
  * Represents the current state of the graphics library. This class is used
@@ -195,7 +195,7 @@ public class RenderContext {
      * 
      * @see Renderer#setTexture(int, com.jme3.texture.Texture) 
      */
-    public Image[] boundTextures = new Image[16];
+    public IImage[] boundTextures = new IImage[16];
 
     /**
      * IDList for texture units

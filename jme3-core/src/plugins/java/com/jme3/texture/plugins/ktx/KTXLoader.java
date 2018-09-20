@@ -38,6 +38,7 @@ import com.jme3.renderer.Caps;
 import com.jme3.renderer.opengl.GLImageFormat;
 import com.jme3.renderer.opengl.GLImageFormats;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Image;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
@@ -81,7 +82,7 @@ public class KTXLoader implements AssetLoader {
         InputStream in = null;
         try {
             in = info.openStream();
-            Image img = load(in);
+            IImage img = load(in);
             return img;
         } finally {
             if (in != null) {
@@ -90,7 +91,7 @@ public class KTXLoader implements AssetLoader {
         }
     }
 
-    private Image load(InputStream stream) {
+    private IImage load(InputStream stream) {
 
         byte[] fileId = new byte[12];
 
