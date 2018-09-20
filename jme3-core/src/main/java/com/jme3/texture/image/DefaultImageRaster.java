@@ -33,7 +33,8 @@ package com.jme3.texture.image;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.texture.Image;
+import com.jme3.texture.IImage;
+
 import java.nio.ByteBuffer;
 
 public class DefaultImageRaster extends ImageRaster {
@@ -51,7 +52,7 @@ public class DefaultImageRaster extends ImageRaster {
         }
     }
     
-    public DefaultImageRaster(Image image, int slice, int mipMapLevel, boolean convertToLinear) {
+    public DefaultImageRaster(IImage image, int slice, int mipMapLevel, boolean convertToLinear) {
         int[] mipMapSizes = image.getMipMapSizes();
         int availableMips = mipMapSizes != null ? mipMapSizes.length : 1;
         

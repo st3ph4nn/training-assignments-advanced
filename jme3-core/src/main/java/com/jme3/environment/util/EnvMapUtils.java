@@ -40,6 +40,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture2D;
@@ -103,7 +104,7 @@ public class EnvMapUtils {
      * @param format the format of the image
      * @return a cube map
      */
-    public static TextureCubeMap makeCubeMap(Image rightImg, Image leftImg, Image upImg, Image downImg, Image backImg, Image frontImg, Format format) {
+    public static TextureCubeMap makeCubeMap(IImage rightImg, IImage leftImg, IImage upImg, IImage downImg, IImage backImg, IImage frontImg, Format format) {
         Image cubeImage = new Image(format, leftImg.getWidth(), leftImg.getHeight(), null, ColorSpace.Linear);
 
         cubeImage.addData(rightImg.getData(0));
@@ -151,7 +152,7 @@ public class EnvMapUtils {
      * @return
      */
     public static TextureCubeMap duplicateCubeMap(TextureCubeMap sourceMap) {
-        Image srcImg = sourceMap.getImage();
+        IImage srcImg = sourceMap.getImage();
         Image cubeImage = new Image(srcImg.getFormat(), srcImg.getWidth(), srcImg.getHeight(), null, srcImg.getColorSpace());
 
         for (ByteBuffer d : srcImg.getData()) {

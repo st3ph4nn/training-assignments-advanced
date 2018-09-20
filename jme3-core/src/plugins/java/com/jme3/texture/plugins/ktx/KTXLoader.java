@@ -161,7 +161,7 @@ public class KTXLoader implements AssetLoader {
             
             int[] mipMapSizes = new int[numberOfMipmapLevels];
             
-            Image image = createImage(nbSlices, byteBuffersSize, imgFormat, pixelWidth, pixelHeight, pixelDepth);
+            IImage image = createImage(nbSlices, byteBuffersSize, imgFormat, pixelWidth, pixelHeight, pixelDepth);
             
             byte[] pixelData = new byte[bytePerPixel];            
             
@@ -260,12 +260,12 @@ public class KTXLoader implements AssetLoader {
      * @param depth
      * @return 
      */
-    private Image createImage(int nbSlices, int byteBuffersSize, Format imgFormat, int pixelWidth, int pixelHeight, int depth) {
+    private IImage createImage(int nbSlices, int byteBuffersSize, Format imgFormat, int pixelWidth, int pixelHeight, int depth) {
         ArrayList<ByteBuffer> imageData = new ArrayList<ByteBuffer>(nbSlices);
         for (int i = 0; i < nbSlices; i++) {
             imageData.add(BufferUtils.createByteBuffer(byteBuffersSize));
         }
-        Image image = new Image(imgFormat, pixelWidth, pixelHeight, depth, imageData, ColorSpace.sRGB);
+        IImage image = new Image(imgFormat, pixelWidth, pixelHeight, depth, imageData, ColorSpace.sRGB);
         return image;
     }
 

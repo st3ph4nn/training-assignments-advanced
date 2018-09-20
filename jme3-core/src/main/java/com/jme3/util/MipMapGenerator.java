@@ -35,6 +35,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.image.ImageRaster;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -44,10 +45,10 @@ public class MipMapGenerator {
     private MipMapGenerator() {
     }
     
-    public static Image scaleImage(Image inputImage, int outputWidth, int outputHeight) {
+    public static IImage scaleImage(IImage inputImage, int outputWidth, int outputHeight) {
         int size = outputWidth * outputHeight * inputImage.getFormat().getBitsPerPixel() / 8;
         ByteBuffer buffer = BufferUtils.createByteBuffer(size);
-        Image outputImage = new Image(inputImage.getFormat(), 
+        IImage outputImage = new Image(inputImage.getFormat(), 
                                       outputWidth, 
                                       outputHeight, 
                                       buffer, 
@@ -95,17 +96,17 @@ public class MipMapGenerator {
         return outputImage;
     }
     
-    public static Image resizeToPowerOf2(Image original){
+    public static IImage resizeToPowerOf2(IImage original){
         int potWidth = FastMath.nearestPowerOfTwo(original.getWidth());
         int potHeight = FastMath.nearestPowerOfTwo(original.getHeight());
         return scaleImage(original, potWidth, potHeight);
     }
     
-    public static void generateMipMaps(Image image){
+    public static void generateMipMaps(IImage image){
         int width = image.getWidth();
         int height = image.getHeight();
 
-        Image current = image;
+        IImage current = image;
         ArrayList<ByteBuffer> output = new ArrayList<ByteBuffer>();
         int totalSize = 0;
         

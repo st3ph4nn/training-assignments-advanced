@@ -35,7 +35,7 @@ import java.nio.ByteBuffer;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.texture.Image;
+import com.jme3.texture.IImage;
 
 
 public class MipMapImageRaster extends ImageRaster {
@@ -51,7 +51,7 @@ public class MipMapImageRaster extends ImageRaster {
         }
     }
 
-    public MipMapImageRaster(Image image, int slice) {
+    public MipMapImageRaster(IImage image, int slice) {
         super.image = image;
         super.slice = slice;
         super.buffer = image.getData(slice);

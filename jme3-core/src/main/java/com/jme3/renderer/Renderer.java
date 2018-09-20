@@ -40,6 +40,7 @@ import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Format;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.jme3.util.NativeObject;
@@ -254,7 +255,7 @@ public interface Renderer {
      * @param x the x position to put the image into the texture
      * @param y the y position to put the image into the texture
      */
-    public void modifyTexture(Texture tex, Image pixels, int x, int y);
+    public void modifyTexture(Texture tex, IImage pixels, int x, int y);
 
     /**
      * Deletes a texture from the GPU.

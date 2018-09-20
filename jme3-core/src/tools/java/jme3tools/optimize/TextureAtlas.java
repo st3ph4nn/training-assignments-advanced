@@ -43,6 +43,7 @@ import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.texture.Image;
 import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
@@ -579,7 +580,7 @@ public class TextureAtlas {
         }
 
         // Algorithm from http://www.blackpawn.com/texts/lightmaps/
-        public Node insert(Image image) {
+        public Node insert(IImage image) {
             if (!isLeaf()) {
                 Node newNode = child[0].insert(image);
 

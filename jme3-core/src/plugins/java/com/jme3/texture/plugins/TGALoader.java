@@ -164,7 +164,7 @@ public final class TGALoader implements AssetLoader {
 	}
 
 	private static IImage createTextureImageObject(TGAHeader tgaHeader, Format format, ByteBuffer scratch) {
-		Image textureImage = new Image();
+		IImage textureImage = new Image();
         textureImage.setFormat(format);
         textureImage.setWidth(tgaHeader.getWidth());
         textureImage.setHeight(tgaHeader.getHeight());

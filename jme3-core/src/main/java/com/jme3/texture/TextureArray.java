@@ -76,7 +76,7 @@ public class TextureArray extends Texture {
         Image arrayImage = new Image(format, width, height, null, colorSpace);
         arrayImage.setMipMapSizes(mipMapSizes);
         
-        for (Image img : images) {
+        for (IImage img : images) {
             if (img.getHeight() != height || img.getWidth() != width) {
                 throw new IllegalArgumentException("Images in texture array must have same dimensions");
             }

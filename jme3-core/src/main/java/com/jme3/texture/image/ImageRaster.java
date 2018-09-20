@@ -34,6 +34,7 @@ package com.jme3.texture.image;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.system.JmeSystem;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Image;
 import java.nio.ByteBuffer;
 
@@ -69,7 +70,7 @@ public abstract class ImageRaster {
 	
 	protected int[] components = new int[4];
 	protected ByteBuffer buffer;
-	protected Image image;
+	protected IImage image;
     protected ImageCodec codec;
     protected byte[] temp;
     protected int slice;
@@ -89,7 +90,7 @@ public abstract class ImageRaster {
      * colors to be in the image's native {@link Image#getColorSpace() color space}.
      * @return An ImageRaster to read / write to the image.
      */
-    public static ImageRaster create(Image image, int slice, int mipMapLevel, boolean convertToLinear) {
+    public static ImageRaster create(IImage image, int slice, int mipMapLevel, boolean convertToLinear) {
         return new DefaultImageRaster(image, slice, mipMapLevel, convertToLinear);
     }
     
@@ -101,7 +102,7 @@ public abstract class ImageRaster {
      * arrays or cubemaps.
      * @return An ImageRaster to read / write to the image.
      */
-    public static ImageRaster create(Image image, int slice) {
+    public static ImageRaster create(IImage image, int slice) {
         return create(image, slice, 0, false);
     }
     
@@ -111,7 +112,7 @@ public abstract class ImageRaster {
      * @param image The image to read / write to.
      * @return An ImageRaster to read / write to the image.
      */
-    public static ImageRaster create(Image image) {
+    public static ImageRaster create(IImage image) {
         if (image.getData().size() > 1) {
             throw new IllegalStateException("Use constructor that takes slices argument to read from multislice image");
         }

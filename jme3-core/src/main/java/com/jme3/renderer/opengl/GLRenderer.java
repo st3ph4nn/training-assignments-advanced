@@ -77,6 +77,7 @@ import com.jme3.shader.Shader.ShaderType;
 import com.jme3.shader.Uniform;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.FrameBuffer.RenderBuffer;
+import com.jme3.texture.IImage;
 import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
 import com.jme3.texture.MagFilter;
@@ -2233,7 +2234,7 @@ public final class GLRenderer implements Renderer {
             }
         }
 
-        Image imageForUpload;
+        IImage imageForUpload;
         if (scaleToPot) {
             imageForUpload = MipMapGenerator.resizeToPowerOf2(img);
         } else {
@@ -2312,7 +2313,7 @@ public final class GLRenderer implements Renderer {
         setupTextureParams(unit, tex);
     }
 
-    public void modifyTexture(Texture tex, Image pixels, int x, int y) {
+    public void modifyTexture(Texture tex, IImage pixels, int x, int y) {
         setTexture(0, tex);
         int target = convertTextureType(tex.getType(), pixels.getMultiSamples(), -1);
         texUtil.uploadSubTexture(pixels, target, 0, x, y, linearizeSrgbImages);

@@ -48,6 +48,7 @@ import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.texture.Format;
 import com.jme3.texture.FrameBuffer;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import java.util.EnumMap;
@@ -143,7 +144,7 @@ public class NullRenderer implements Renderer {
     public void setTexture(int unit, Texture tex) {
     }
 
-    public void modifyTexture(Texture tex, Image pixels, int x, int y) {
+    public void modifyTexture(Texture tex, IImage pixels, int x, int y) {
     }
 
     public void updateBufferData(VertexBuffer vb) {

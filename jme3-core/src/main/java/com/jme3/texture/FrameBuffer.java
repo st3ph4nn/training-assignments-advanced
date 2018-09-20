@@ -247,7 +247,7 @@ public class FrameBuffer extends NativeObject {
     }
 
     private void checkSetTexture(Texture tex, boolean depth){
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         if (img == null)
             throw new IllegalArgumentException("Texture not initialized with RTT.");
 
@@ -401,7 +401,7 @@ public class FrameBuffer extends NativeObject {
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         checkSetTexture(tex, false);
 
         RenderBuffer colorBuf = new RenderBuffer();
@@ -425,7 +425,7 @@ public class FrameBuffer extends NativeObject {
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         checkSetTexture(tex, false);
 
         RenderBuffer colorBuf = new RenderBuffer();
@@ -451,7 +451,7 @@ public class FrameBuffer extends NativeObject {
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         checkSetTexture(tex, false);
 
         RenderBuffer colorBuf = new RenderBuffer();
@@ -472,7 +472,7 @@ public class FrameBuffer extends NativeObject {
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         checkSetTexture(tex, true);
         
         depthBuf = new RenderBuffer();
@@ -484,7 +484,7 @@ public class FrameBuffer extends NativeObject {
         if (id != -1)
             throw new UnsupportedOperationException("FrameBuffer already initialized.");
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         checkSetTexture(tex, true);
         
         depthBuf = new RenderBuffer();
