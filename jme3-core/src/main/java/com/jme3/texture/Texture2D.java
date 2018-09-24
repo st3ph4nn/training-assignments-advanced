@@ -76,7 +76,7 @@ public class Texture2D extends Texture {
      * @param height
      * @param format
      */
-    public Texture2D(int width, int height, Image.Format format){
+    public Texture2D(int width, int height, Format format){
         this(new Image(format, width, height, null, ColorSpace.Linear));
     }
 
@@ -91,20 +91,20 @@ public class Texture2D extends Texture {
      * @param format
      * @param numSamples
      */
-    public Texture2D(int width, int height, int numSamples, Image.Format format){
+    public Texture2D(int width, int height, int numSamples, Format format){
         this(new Image(format, width, height, null, ColorSpace.Linear));
         getImage().setMultiSamples(numSamples);
     }
 
     @Override
-    public Texture createSimpleClone() {
+    public ITexture createSimpleClone() {
         Texture2D clone = new Texture2D();
         createSimpleClone(clone);
         return clone;
     }
 
     @Override
-    public Texture createSimpleClone(Texture rVal) {
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setWrap(WrapAxis.S, wrapS);
         rVal.setWrap(WrapAxis.T, wrapT);
         return super.createSimpleClone(rVal);

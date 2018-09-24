@@ -42,6 +42,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Format;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.Image;
 import com.jme3.texture.Texture2D;
@@ -70,7 +71,7 @@ public class EnvironmentCamera extends BaseAppState {
     protected static Vector3f[] axisY = new Vector3f[6];
     protected static Vector3f[] axisZ = new Vector3f[6];
 
-    protected Image.Format imageFormat = Image.Format.RGB16F;
+    protected Format imageFormat = Format.RGB16F;
 
     //Axis for cameras
     static {
@@ -145,7 +146,7 @@ public class EnvironmentCamera extends BaseAppState {
      * @param position the position of the camera.
      * @param imageFormat the ImageFormat to use for the resulting texture.
      */
-    public EnvironmentCamera(int size, Vector3f position, Image.Format imageFormat) {
+    public EnvironmentCamera(int size, Vector3f position, Format imageFormat) {
         this.size = size;
         this.position.set(position);
         this.imageFormat = imageFormat;
@@ -261,7 +262,7 @@ public class EnvironmentCamera extends BaseAppState {
      *
      * @return
      */
-    public Image.Format getImageFormat() {
+    public Format getImageFormat() {
         return imageFormat;
     }
 
@@ -316,7 +317,7 @@ public class EnvironmentCamera extends BaseAppState {
     protected FrameBuffer createOffScreenFrameBuffer(int mapSize, ViewPort offView) {
         // create offscreen framebuffer
         final FrameBuffer offBuffer = new FrameBuffer(mapSize, mapSize, 1);
-        offBuffer.setDepthBuffer(Image.Format.Depth);
+        offBuffer.setDepthBuffer(Format.Depth);
         offView.setOutputFrameBuffer(offBuffer);
         return offBuffer;
     }

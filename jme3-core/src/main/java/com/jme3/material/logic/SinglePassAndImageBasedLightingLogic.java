@@ -110,13 +110,13 @@ public final class SinglePassAndImageBasedLightingLogic extends DefaultTechnique
             return 0;
         }
 
-        Uniform lightData = shader.getUniform("g_LightData");
+        IUniform lightData = shader.getUniform("g_LightData");
         lightData.setVector4Length(numLights * 3);//8 lights * max 3
-        Uniform ambientColor = shader.getUniform("g_AmbientLightColor");
-        Uniform lightProbeData = shader.getUniform("g_LightProbeData");
+        IUniform ambientColor = shader.getUniform("g_AmbientLightColor");
+        IUniform lightProbeData = shader.getUniform("g_LightProbeData");
         lightProbeData.setVector4Length(1);
-        Uniform lightProbeIrrMap = shader.getUniform("g_IrradianceMap");
-        Uniform lightProbePemMap = shader.getUniform("g_PrefEnvMap");
+        IUniform lightProbeIrrMap = shader.getUniform("g_IrradianceMap");
+        IUniform lightProbePemMap = shader.getUniform("g_PrefEnvMap");
 
         lightProbe = null;
         if (startIndex != 0) {

@@ -35,8 +35,9 @@ import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.FrameBuffer.RenderBuffer;
-import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.IImage;
+import com.jme3.texture.ITexture;
+import com.jme3.texture.Format;
 import com.jme3.texture.Texture;
 import java.util.Collection;
 
@@ -369,11 +370,11 @@ public enum Caps {
      * @return True if it is supported, false otherwise.
      */
     public static boolean supports(Collection<Caps> caps, Texture tex){
-        if (tex.getType() == Texture.Type.TwoDimensionalArray
+        if (tex.getType() == ITexture.Type.TwoDimensionalArray
          && !caps.contains(Caps.TextureArray))
             return false;
 
-        Image img = tex.getImage();
+        IImage img = tex.getImage();
         if (img == null)
             return true;
 

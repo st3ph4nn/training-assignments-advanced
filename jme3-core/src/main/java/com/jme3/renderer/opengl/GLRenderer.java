@@ -70,16 +70,22 @@ import com.jme3.scene.VertexBuffer.Format;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.VertexBuffer.Usage;
 import com.jme3.shader.Attribute;
+import com.jme3.shader.IUniform;
 import com.jme3.shader.Shader;
 import com.jme3.shader.Shader.ShaderSource;
 import com.jme3.shader.Shader.ShaderType;
 import com.jme3.shader.Uniform;
 import com.jme3.texture.FrameBuffer;
 import com.jme3.texture.FrameBuffer.RenderBuffer;
+import com.jme3.texture.IImage;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Image;
+import com.jme3.texture.MagFilter;
+import com.jme3.texture.MinFilter;
+import com.jme3.texture.ShadowCompareMode;
 import com.jme3.texture.Texture;
-import com.jme3.texture.Texture.ShadowCompareMode;
-import com.jme3.texture.Texture.WrapAxis;
+import com.jme3.texture.WrapAxis;
+import com.jme3.texture.WrapMode;
 import com.jme3.texture.image.LastTextureState;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.ListMap;
@@ -1140,7 +1146,7 @@ public final class GLRenderer implements Renderer {
     protected void resetUniformLocations(Shader shader) {
         ListMap<String, Uniform> uniforms = shader.getUniformMap();
         for (int i = 0; i < uniforms.size(); i++) {
-            Uniform uniform = uniforms.getValue(i);
+            IUniform uniform = uniforms.getValue(i);
             uniform.reset(); // e.g check location again
         }
     }
@@ -1826,7 +1832,7 @@ public final class GLRenderer implements Renderer {
         gl.glReadPixels(vpX, vpY, vpW, vpH, glFormat, dataType, byteBuf);
     }
 
-    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, Image.Format format) {
+    public void readFrameBufferWithFormat(FrameBuffer fb, ByteBuffer byteBuf, com.jme3.texture.Format format) {
         GLImageFormat glFormat = texUtil.getImageFormatWithError(format, false);
         readFrameBufferWithGLFormat(fb, byteBuf, glFormat.format, glFormat.dataType);
     }
@@ -1861,7 +1867,7 @@ public final class GLRenderer implements Renderer {
     /*********************************************************************\
      |* Textures                                                          *|
      \*********************************************************************/
-    private int convertTextureType(Texture.Type type, int samples, int face) {
+    private int convertTextureType(Type type, int samples, int face) {
         if (samples > 1 && !caps.contains(Caps.TextureMultisample)) {
             throw new RendererException("Multisample textures are not supported" +
                     " by the video hardware.");
@@ -1903,7 +1909,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertMagFilter(Texture.MagFilter filter) {
+    private int convertMagFilter(MagFilter filter) {
         switch (filter) {
             case Bilinear:
                 return GLConstants.GL_LINEAR;
@@ -1914,7 +1920,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertMinFilter(Texture.MinFilter filter, boolean haveMips) {
+    private int convertMinFilter(MinFilter filter, boolean haveMips) {
         if (haveMips){
             switch (filter) {
                 case Trilinear:
@@ -1948,7 +1954,7 @@ public final class GLRenderer implements Renderer {
         }
     }
 
-    private int convertWrapMode(Texture.WrapMode mode) {
+    private int convertWrapMode(WrapMode mode) {
         switch (mode) {
             case BorderClamp:
             case Clamp:
@@ -2083,15 +2089,15 @@ public final class GLRenderer implements Renderer {
         switch (tex.getType()) {
             case CubeMap:
             case ThreeDimensional:
-                if (tex.getWrap(WrapAxis.R) != Texture.WrapMode.EdgeClamp) {
+                if (tex.getWrap(WrapAxis.R) != ITexture.WrapMode.EdgeClamp) {
                     throw new RendererException("repeating non-power-of-2 textures "
                             + "are not supported by the video hardware");
                 }
                 // fallthrough intentional!!!
             case TwoDimensionalArray:
             case TwoDimensional:
-                if (tex.getWrap(WrapAxis.S) != Texture.WrapMode.EdgeClamp
-                        || tex.getWrap(WrapAxis.T) != Texture.WrapMode.EdgeClamp) {
+                if (tex.getWrap(WrapAxis.S) != ITexture.WrapMode.EdgeClamp
+                        || tex.getWrap(WrapAxis.T) != ITexture.WrapMode.EdgeClamp) {
                     throw new RendererException("repeating non-power-of-2 textures "
                             + "are not supported by the video hardware");
                 }
@@ -2154,7 +2160,7 @@ public final class GLRenderer implements Renderer {
      * @param scaleToPot If true, the image will be scaled to power-of-2 dimensions
      * before being uploaded.
      */
-    public void updateTexImageData(Image img, Texture.Type type, int unit, boolean scaleToPot) {
+    public void updateTexImageData(Image img, Type type, int unit, boolean scaleToPot) {
         int texId = img.getId();
         if (texId == -1) {
             // create texture
@@ -2228,7 +2234,7 @@ public final class GLRenderer implements Renderer {
             }
         }
 
-        Image imageForUpload;
+        IImage imageForUpload;
         if (scaleToPot) {
             imageForUpload = MipMapGenerator.resizeToPowerOf2(img);
         } else {
@@ -2307,7 +2313,7 @@ public final class GLRenderer implements Renderer {
         setupTextureParams(unit, tex);
     }
 
-    public void modifyTexture(Texture tex, Image pixels, int x, int y) {
+    public void modifyTexture(Texture tex, IImage pixels, int x, int y) {
         setTexture(0, tex);
         int target = convertTextureType(tex.getType(), pixels.getMultiSamples(), -1);
         texUtil.uploadSubTexture(pixels, target, 0, x, y, linearizeSrgbImages);
@@ -2863,4 +2869,7 @@ public final class GLRenderer implements Renderer {
             linearizeSrgbImages = linearize;
         }
     }
+    
+
+
 }

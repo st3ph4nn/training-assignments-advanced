@@ -34,7 +34,8 @@ package com.jme3.texture.plugins.ktx;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.opengl.GLImageFormat;
 import com.jme3.renderer.opengl.GLImageFormats;
-import com.jme3.texture.Image;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.Texture3D;
@@ -82,7 +83,7 @@ public class KTXWriter {
      * @param image the image to write
      * @param fileName the name of the file to write
      */
-    public void write(Image image, String fileName) {
+    public void write(IImage image, String fileName) {
         write(image, Texture2D.class, fileName);
     }
 
@@ -96,7 +97,7 @@ public class KTXWriter {
      * @param textureType the texture type
      * @param fileName the name of the file to write
      */
-    public void write(Image image, Class<? extends Texture> textureType, String fileName) {
+    public void write(IImage image, Class<? extends Texture> textureType, String fileName) {
 
         FileOutputStream outs = null;
         try {
@@ -261,7 +262,7 @@ public class KTXWriter {
      * @param format
      * @return 
      */
-    private GLImageFormat getGlFormat(Image.Format format) {
+    private GLImageFormat getGlFormat(Format format) {
         EnumSet<Caps> caps = EnumSet.allOf(Caps.class);
         GLImageFormat[][] formats = GLImageFormats.getFormatsForCaps(caps);
         return formats[0][format.ordinal()];

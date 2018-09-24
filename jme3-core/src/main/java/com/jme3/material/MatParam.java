@@ -35,8 +35,12 @@ import com.jme3.asset.TextureKey;
 import com.jme3.export.*;
 import com.jme3.math.*;
 import com.jme3.shader.VarType;
+import com.jme3.texture.ITexture;
+import com.jme3.texture.MinFilter;
 import com.jme3.texture.Texture;
-import com.jme3.texture.Texture.WrapMode;
+import com.jme3.texture.WrapAxis;
+import com.jme3.texture.WrapMode;
+
 import java.io.IOException;
 
 /**
@@ -246,20 +250,20 @@ When arrays can be inserted in J3M files
                 }
 
                 //Wrap mode
-                ret += getWrapMode(texVal, Texture.WrapAxis.S);
-                ret += getWrapMode(texVal, Texture.WrapAxis.T);
-                ret += getWrapMode(texVal, Texture.WrapAxis.R);
+                ret += getWrapMode(texVal, ITexture.WrapAxis.S);
+                ret += getWrapMode(texVal, ITexture.WrapAxis.T);
+                ret += getWrapMode(texVal, ITexture.WrapAxis.R);
 
                 //Min and Mag filter
-                Texture.MinFilter def =  Texture.MinFilter.BilinearNoMipMaps;
+                MinFilter def =  ITexture.MinFilter.BilinearNoMipMaps;
                 if(texVal.getImage().hasMipmaps() || texKey.isGenerateMips()){
-                    def = Texture.MinFilter.Trilinear;
+                    def = ITexture.MinFilter.Trilinear;
                 }
                 if(texVal.getMinFilter() != def){
                     ret += "Min" + texVal.getMinFilter().name()+ " ";
                 }
 
-                if(texVal.getMagFilter() != Texture.MagFilter.Bilinear){
+                if(texVal.getMagFilter() != ITexture.MagFilter.Bilinear){
                     ret += "Mag" + texVal.getMagFilter().name()+ " ";
                 }
 
@@ -269,7 +273,7 @@ When arrays can be inserted in J3M files
         }
     }
 
-    private String getWrapMode(Texture texVal, Texture.WrapAxis axis) {
+    private String getWrapMode(Texture texVal, WrapAxis axis) {
         WrapMode mode = WrapMode.EdgeClamp;
         try{
             mode = texVal.getWrap(axis);

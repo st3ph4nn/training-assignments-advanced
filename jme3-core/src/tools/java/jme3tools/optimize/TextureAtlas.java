@@ -42,7 +42,9 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.image.ColorSpace;
@@ -404,9 +406,9 @@ public class TextureAtlas {
         if (image != null) {
             //TODO check if color space shouldn't be sRGB
             Texture2D tex = new Texture2D(new Image(format, atlasWidth, atlasHeight, BufferUtils.createByteBuffer(image), null, ColorSpace.Linear));
-            tex.setMagFilter(Texture.MagFilter.Bilinear);
-            tex.setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
-            tex.setWrap(Texture.WrapMode.EdgeClamp);
+            tex.setMagFilter(ITexture.MagFilter.Bilinear);
+            tex.setMinFilter(ITexture.MinFilter.BilinearNearestMipMap);
+            tex.setWrap(ITexture.WrapMode.EdgeClamp);
             return tex;
         }
         return null;
@@ -578,7 +580,7 @@ public class TextureAtlas {
         }
 
         // Algorithm from http://www.blackpawn.com/texts/lightmaps/
-        public Node insert(Image image) {
+        public Node insert(IImage image) {
             if (!isLeaf()) {
                 Node newNode = child[0].insert(image);
 

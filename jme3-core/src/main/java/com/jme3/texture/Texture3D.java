@@ -78,7 +78,7 @@ public class Texture3D extends Texture {
      * @param depth
      * @param format
      */
-    public Texture3D(int width, int height, int depth, Image.Format format) {
+    public Texture3D(int width, int height, int depth, Format format) {
         this(new Image(format, width, height, depth, null, ColorSpace.Linear));
     }
 
@@ -93,20 +93,20 @@ public class Texture3D extends Texture {
      * @param format
      * @param numSamples
      */
-    public Texture3D(int width, int height, int depth, int numSamples, Image.Format format) {
+    public Texture3D(int width, int height, int depth, int numSamples, Format format) {
         this(new Image(format, width, height, depth, null, ColorSpace.Linear));
         getImage().setMultiSamples(numSamples);
     }
 
     @Override
-    public Texture createSimpleClone() {
+    public ITexture createSimpleClone() {
         Texture3D clone = new Texture3D();
         createSimpleClone(clone);
         return clone;
     }
 
     @Override
-    public Texture createSimpleClone(Texture rVal) {
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setWrap(WrapAxis.S, wrapS);
         rVal.setWrap(WrapAxis.T, wrapT);
         rVal.setWrap(WrapAxis.R, wrapR);

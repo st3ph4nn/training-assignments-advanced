@@ -36,7 +36,7 @@ import com.jme3.math.ColorRGBA;
 import static com.jme3.math.FastMath.pow;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.texture.Image;
+import com.jme3.texture.IImage;
 import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.DefaultImageRaster;
 import com.jme3.texture.image.MipMapImageRaster;
@@ -55,7 +55,7 @@ public class CubeMapWrapper {
     private final DefaultImageRaster raster;
     private int[] sizes;
     private final Vector2f uvs = new Vector2f();
-    private final Image image;
+    private final IImage image;
 
     /**
      * Creates a CubeMapWrapper for the given cube map

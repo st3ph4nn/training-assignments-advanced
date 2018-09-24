@@ -31,7 +31,6 @@
  */
 package com.jme3.texture;
 
-import com.jme3.texture.Image.Format;
 import com.jme3.texture.image.ColorSpace;
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +76,7 @@ public class TextureArray extends Texture {
         Image arrayImage = new Image(format, width, height, null, colorSpace);
         arrayImage.setMipMapSizes(mipMapSizes);
         
-        for (Image img : images) {
+        for (IImage img : images) {
             if (img.getHeight() != height || img.getWidth() != width) {
                 throw new IllegalArgumentException("Images in texture array must have same dimensions");
             }
@@ -95,14 +94,14 @@ public class TextureArray extends Texture {
     }
 
     @Override
-    public Texture createSimpleClone() {
+    public ITexture createSimpleClone() {
         TextureArray clone = new TextureArray();
         createSimpleClone(clone);
         return clone;
     }
 
     @Override
-    public Texture createSimpleClone(Texture rVal) {
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setWrap(WrapAxis.S, wrapS);
         rVal.setWrap(WrapAxis.T, wrapT);
         return super.createSimpleClone(rVal);

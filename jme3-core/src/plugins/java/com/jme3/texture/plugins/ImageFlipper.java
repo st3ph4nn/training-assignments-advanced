@@ -31,7 +31,7 @@
  */
 package com.jme3.texture.plugins;
 
-import com.jme3.texture.Image;
+import com.jme3.texture.IImage;
 import com.jme3.util.BufferUtils;
 import java.nio.ByteBuffer;
 
@@ -44,7 +44,7 @@ import java.nio.ByteBuffer;
  */
 public class ImageFlipper {
 
-    public static void flipImage(Image img, int index){
+    public static void flipImage(IImage img, int index){
         if (img.getFormat().isCompressed())
             throw new UnsupportedOperationException("Flipping compressed " +
                                                     "images is unsupported.");

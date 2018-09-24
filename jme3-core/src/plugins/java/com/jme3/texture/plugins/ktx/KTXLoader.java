@@ -37,6 +37,8 @@ import com.jme3.asset.TextureKey;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.opengl.GLImageFormat;
 import com.jme3.renderer.opengl.GLImageFormats;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.Image;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
@@ -80,7 +82,7 @@ public class KTXLoader implements AssetLoader {
         InputStream in = null;
         try {
             in = info.openStream();
-            Image img = load(in);
+            IImage img = load(in);
             return img;
         } finally {
             if (in != null) {
@@ -89,7 +91,7 @@ public class KTXLoader implements AssetLoader {
         }
     }
 
-    private Image load(InputStream stream) {
+    private IImage load(InputStream stream) {
 
         byte[] fileId = new byte[12];
 
@@ -149,7 +151,7 @@ public class KTXLoader implements AssetLoader {
             
             int nbSlices = Math.max(numberOfFaces,numberOfArrayElements);
 
-            Image.Format imgFormat = getImageFormat(glFormat, glInternalFormat, glType);
+            Format imgFormat = getImageFormat(glFormat, glInternalFormat, glType);
             log.log(Level.FINE, "img format {0}", imgFormat.toString());
             
            
@@ -159,7 +161,7 @@ public class KTXLoader implements AssetLoader {
             
             int[] mipMapSizes = new int[numberOfMipmapLevels];
             
-            Image image = createImage(nbSlices, byteBuffersSize, imgFormat, pixelWidth, pixelHeight, pixelDepth);
+            IImage image = createImage(nbSlices, byteBuffersSize, imgFormat, pixelWidth, pixelHeight, pixelDepth);
             
             byte[] pixelData = new byte[bytePerPixel];            
             
@@ -258,12 +260,12 @@ public class KTXLoader implements AssetLoader {
      * @param depth
      * @return 
      */
-    private Image createImage(int nbSlices, int byteBuffersSize, Image.Format imgFormat, int pixelWidth, int pixelHeight, int depth) {
+    private IImage createImage(int nbSlices, int byteBuffersSize, Format imgFormat, int pixelWidth, int pixelHeight, int depth) {
         ArrayList<ByteBuffer> imageData = new ArrayList<ByteBuffer>(nbSlices);
         for (int i = 0; i < nbSlices; i++) {
             imageData.add(BufferUtils.createByteBuffer(byteBuffersSize));
         }
-        Image image = new Image(imgFormat, pixelWidth, pixelHeight, depth, imageData, ColorSpace.sRGB);
+        IImage image = new Image(imgFormat, pixelWidth, pixelHeight, depth, imageData, ColorSpace.sRGB);
         return image;
     }
 
@@ -333,7 +335,7 @@ public class KTXLoader implements AssetLoader {
      * @param glType
      * @return 
      */
-    private Image.Format getImageFormat(int glFormat, int glInternalFormat, int glType) {
+    private Format getImageFormat(int glFormat, int glInternalFormat, int glType) {
         EnumSet<Caps> caps = EnumSet.allOf(Caps.class);
         GLImageFormat[][] formats = GLImageFormats.getFormatsForCaps(caps);
         for (GLImageFormat[] format : formats) {
@@ -342,7 +344,7 @@ public class KTXLoader implements AssetLoader {
                 if (glImgFormat != null) {
                     if (glImgFormat.format == glFormat && glImgFormat.dataType == glType) {
                         if (glFormat == glInternalFormat || glImgFormat.internalFormat == glInternalFormat) {
-                            return Image.Format.values()[j];
+                            return Format.values()[j];
                         }
                     }
                 }

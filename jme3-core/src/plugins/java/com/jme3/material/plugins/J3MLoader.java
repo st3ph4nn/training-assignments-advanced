@@ -46,8 +46,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.shader.DefineList;
 import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.WrapAxis;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.PlaceholderAssets;
 import com.jme3.util.blockparser.BlockLanguageParser;
@@ -258,13 +260,13 @@ public class J3MLoader implements AssetLoader {
 
         switch (type) {
             case Texture3D:
-                textureKey.setTextureTypeHint(Texture.Type.ThreeDimensional);
+                textureKey.setTextureTypeHint(ITexture.Type.ThreeDimensional);
                 break;
             case TextureArray:
-                textureKey.setTextureTypeHint(Texture.Type.TwoDimensionalArray);
+                textureKey.setTextureTypeHint(ITexture.Type.TwoDimensionalArray);
                 break;
             case TextureCubeMap:
-                textureKey.setTextureTypeHint(Texture.Type.CubeMap);
+                textureKey.setTextureTypeHint(ITexture.Type.CubeMap);
                 break;
         }
 
@@ -830,7 +832,7 @@ public class J3MLoader implements AssetLoader {
         Min {
             @Override
             public void applyToTexture(final String option, final Texture texture) {
-                texture.setMinFilter(Texture.MinFilter.valueOf(option));
+                texture.setMinFilter(ITexture.MinFilter.valueOf(option));
             }
         },
 
@@ -840,7 +842,7 @@ public class J3MLoader implements AssetLoader {
         Mag {
             @Override
             public void applyToTexture(final String option, final Texture texture) {
-                texture.setMagFilter(Texture.MagFilter.valueOf(option));
+                texture.setMagFilter(ITexture.MagFilter.valueOf(option));
             }
         },
 
@@ -857,10 +859,10 @@ public class J3MLoader implements AssetLoader {
                 if (separatorPosition >= option.length() - 2) {
                     final String axis = option.substring(separatorPosition + 1);
                     final String mode = option.substring(0, separatorPosition);
-                    final Texture.WrapAxis wrapAxis = Texture.WrapAxis.valueOf(axis);
-                    texture.setWrap(wrapAxis, Texture.WrapMode.valueOf(mode));
+                    final WrapAxis wrapAxis = ITexture.WrapAxis.valueOf(axis);
+                    texture.setWrap(wrapAxis, ITexture.WrapMode.valueOf(mode));
                 } else {
-                    texture.setWrap(Texture.WrapMode.valueOf(option));
+                    texture.setWrap(ITexture.WrapMode.valueOf(option));
                 }
             }
         },

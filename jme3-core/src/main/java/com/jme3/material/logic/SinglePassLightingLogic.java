@@ -48,8 +48,8 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.scene.Geometry;
 import com.jme3.shader.DefineList;
+import com.jme3.shader.IUniform;
 import com.jme3.shader.Shader;
-import com.jme3.shader.Uniform;
 import com.jme3.shader.VarType;
 import com.jme3.util.TempVars;
 import java.util.EnumSet;
@@ -102,9 +102,9 @@ public final class SinglePassLightingLogic extends DefaultTechniqueDefLogic {
             return 0;
         }
 
-        Uniform lightData = shader.getUniform("g_LightData");
+        IUniform lightData = shader.getUniform("g_LightData");
         lightData.setVector4Length(numLights * 3);//8 lights * max 3
-        Uniform ambientColor = shader.getUniform("g_AmbientLightColor");
+        IUniform ambientColor = shader.getUniform("g_AmbientLightColor");
 
 
         if (startIndex != 0) {

@@ -41,7 +41,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import com.jme3.texture.TextureCubeMap;
 import java.nio.ByteBuffer;
@@ -205,10 +207,10 @@ public class SkyFactory {
                 skyMat.setBoolean("EquirectMap", true);
                 break;
         }
-        texture.setMagFilter(Texture.MagFilter.Bilinear);
-        texture.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
+        texture.setMagFilter(ITexture.MagFilter.Bilinear);
+        texture.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
         texture.setAnisotropicFilter(0);
-        texture.setWrap(Texture.WrapMode.EdgeClamp);
+        texture.setWrap(ITexture.WrapMode.EdgeClamp);
         skyMat.setTexture("Texture", texture);
         sky.setMaterial(skyMat);
 
@@ -287,13 +289,13 @@ public class SkyFactory {
         TextureKey key = new TextureKey(textureName, true);
         key.setGenerateMips(false);
         if (envMapType == EnvMapType.CubeMap) {
-            key.setTextureTypeHint(Texture.Type.CubeMap);
+            key.setTextureTypeHint(ITexture.Type.CubeMap);
         }
         Texture tex = assetManager.loadTexture(key);
         return createSky(assetManager, tex, envMapType);
     }
 
-    private static void checkImage(Image image) {
+    private static void checkImage(IImage image) {
 //        if (image.getDepth() != 1)
 //            throw new IllegalArgumentException("3D/Array images not allowed");
 
@@ -306,7 +308,7 @@ public class SkyFactory {
         }
     }
 
-    private static void checkImagesForCubeMap(Image... images) {
+    private static void checkImagesForCubeMap(IImage... images) {
         if (images.length == 1) {
             return;
         }
@@ -321,7 +323,7 @@ public class SkyFactory {
         checkImage(images[0]);
 
         for (int i = 1; i < images.length; i++) {
-            Image image = images[i];
+            IImage image = images[i];
             checkImage(images[i]);
             if (image.getFormat() != fmt) {
                 throw new IllegalArgumentException("Images must have same format");
@@ -387,12 +389,12 @@ public class SkyFactory {
             Texture east, Texture north, Texture south, Texture up,
             Texture down, Vector3f normalScale, float sphereRadius) {
 
-        Image westImg = west.getImage();
-        Image eastImg = east.getImage();
-        Image northImg = north.getImage();
-        Image southImg = south.getImage();
-        Image upImg = up.getImage();
-        Image downImg = down.getImage();
+        IImage westImg = west.getImage();
+        IImage eastImg = east.getImage();
+        IImage northImg = north.getImage();
+        IImage southImg = south.getImage();
+        IImage upImg = up.getImage();
+        IImage downImg = down.getImage();
 
         checkImagesForCubeMap(westImg, eastImg, northImg, southImg, upImg, downImg);
 

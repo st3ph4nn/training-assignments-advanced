@@ -48,9 +48,9 @@ import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.texture.Image.Format;
-import com.jme3.texture.Texture.WrapMode;
+import com.jme3.texture.Format;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.WrapMode;
 import com.jme3.util.TempVars;
 import java.io.IOException;
 

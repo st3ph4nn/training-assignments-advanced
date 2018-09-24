@@ -34,8 +34,8 @@ package com.jme3.renderer.opengl;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.RenderContext;
 import com.jme3.renderer.RendererException;
-import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.texture.image.ColorSpace;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
@@ -233,13 +233,13 @@ final class TextureUtil {
         }
     }
 
-    public void uploadTexture(Image image,
+    public void uploadTexture(IImage image,
                               int target,
                               int index,
                               boolean linearizeSrgb) {
 
         boolean getSrgbFormat = image.getColorSpace() == ColorSpace.sRGB && linearizeSrgb;
-        Image.Format jmeFormat = image.getFormat();
+        Format jmeFormat = image.getFormat();
         GLImageFormat oglFormat = getImageFormatWithError(jmeFormat, getSrgbFormat);
 
         ByteBuffer data = null;
@@ -291,7 +291,7 @@ final class TextureUtil {
         }
     }
 
-    public void uploadSubTexture(Image image, int target, int index, int x, int y, boolean linearizeSrgb) {
+    public void uploadSubTexture(IImage image, int target, int index, int x, int y, boolean linearizeSrgb) {
         if (target != GLConstants.GL_TEXTURE_2D || image.getDepth() > 1) {
             throw new UnsupportedOperationException("Updating non-2D texture is not supported");
         }
@@ -304,7 +304,7 @@ final class TextureUtil {
             throw new UnsupportedOperationException("Updating multisampled images is not supported");
         }
         
-        Image.Format jmeFormat = image.getFormat();
+        Format jmeFormat = image.getFormat();
         
         if (jmeFormat.isCompressed()) {
             throw new UnsupportedOperationException("Updating compressed images is not supported");

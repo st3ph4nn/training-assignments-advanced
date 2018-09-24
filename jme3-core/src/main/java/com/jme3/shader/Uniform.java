@@ -37,7 +37,7 @@ import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public class Uniform extends ShaderVariable {
+public class Uniform extends ShaderVariable implements IUniform {
 
     private static final Integer ZERO_INT = 0;
     private static final Float ZERO_FLT = Float.valueOf(0);
@@ -70,6 +70,11 @@ public class Uniform extends ShaderVariable {
      */
     protected boolean setByCurrentMaterial = false;
 
+    
+    
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#hashCode()
+	 */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -79,6 +84,9 @@ public class Uniform extends ShaderVariable {
         return hash;
     }
 
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#equals(java.lang.Object)
+	 */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -94,6 +102,9 @@ public class Uniform extends ShaderVariable {
         return this.binding == other.binding && this.varType == other.varType;
     }
 
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#toString()
+	 */
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -111,7 +122,11 @@ public class Uniform extends ShaderVariable {
         return sb.toString();
     }
 
-    public void setBinding(UniformBinding binding){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#setBinding(com.jme3.shader.UniformBinding)
+	 */
+    @Override
+	public void setBinding(UniformBinding binding){
         this.binding = binding;
     }
 
@@ -135,11 +150,19 @@ public class Uniform extends ShaderVariable {
         return setByCurrentMaterial;
     }
 
-    public void clearSetByCurrentMaterial(){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#clearSetByCurrentMaterial()
+	 */
+    @Override
+	public void clearSetByCurrentMaterial(){
         setByCurrentMaterial = false;
     }
 
-    public void clearValue(){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#clearValue()
+	 */
+    @Override
+	public void clearValue(){
         updateNeeded = true;
 
         if (multiData != null){           
@@ -197,7 +220,11 @@ public class Uniform extends ShaderVariable {
         }
     }
     
-    public void setValue(VarType type, Object value){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#setValue(com.jme3.shader.VarType, java.lang.Object)
+	 */
+    @Override
+	public void setValue(VarType type, Object value){
         if (location == LOC_NOT_DEFINED) {
             return;
         }
@@ -387,7 +414,11 @@ public class Uniform extends ShaderVariable {
         updateNeeded = true;
     }
 
-    public void setVector4Length(int length){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#setVector4Length(int)
+	 */
+    @Override
+	public void setVector4Length(int length){
         if (location == -1) {
             return;
         }
@@ -399,7 +430,11 @@ public class Uniform extends ShaderVariable {
         setByCurrentMaterial = true;
     }
 
-    public void setVector4InArray(float x, float y, float z, float w, int index){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#setVector4InArray(float, float, float, float, int)
+	 */
+    @Override
+	public void setVector4InArray(float x, float y, float z, float w, int index){
         if (location == -1) {
             return;
         }
@@ -415,21 +450,37 @@ public class Uniform extends ShaderVariable {
         setByCurrentMaterial = true;
     }
     
-    public boolean isUpdateNeeded(){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#isUpdateNeeded()
+	 */
+    @Override
+	public boolean isUpdateNeeded(){
         return updateNeeded;
     }
 
-    public void clearUpdateNeeded(){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#clearUpdateNeeded()
+	 */
+    @Override
+	public void clearUpdateNeeded(){
         updateNeeded = false;
     }
 
-    public void reset(){
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#reset()
+	 */
+    @Override
+	public void reset(){
         setByCurrentMaterial = false;
         location = -2;
         updateNeeded = true;
     }
 
-    public void deleteNativeBuffers() {
+    /* (non-Javadoc)
+	 * @see com.jme3.shader.IUniform#deleteNativeBuffers()
+	 */
+    @Override
+	public void deleteNativeBuffers() {
         if (value instanceof Buffer) {
             BufferUtils.destroyDirectBuffer((Buffer)value);
             value = null; // ????

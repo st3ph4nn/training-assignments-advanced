@@ -46,6 +46,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
+import com.jme3.shader.IUniform;
 import com.jme3.shader.Shader;
 import com.jme3.shader.Uniform;
 import com.jme3.shader.UniformBindingManager;
@@ -761,7 +762,7 @@ public class Material implements CloneableSmartAsset, Cloneable, Savable {
                 continue;
             }
 
-            Uniform uniform = shader.getUniform(override.getPrefixedName());
+            IUniform uniform = shader.getUniform(override.getPrefixedName());
 
             if (override.getValue() != null) {
                 if (type.isTextureType()) {
@@ -853,7 +854,7 @@ public class Material implements CloneableSmartAsset, Cloneable, Savable {
         ListMap<String, Uniform> uniforms = shader.getUniformMap();
         int size = uniforms.size();
         for (int i = 0; i < size; i++) {
-            Uniform u = uniforms.getValue(i);
+            IUniform u = uniforms.getValue(i);
             u.clearSetByCurrentMaterial();
         }
     }

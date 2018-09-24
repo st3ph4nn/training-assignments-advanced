@@ -38,6 +38,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState.BlendMode;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.Texture;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -101,8 +102,8 @@ public class BitmapFontLoader implements AssetLoader {
                         TextureKey key = new TextureKey(folder + file, true);
                         key.setGenerateMips(false);
                         tex = assetManager.loadTexture(key);
-                        tex.setMagFilter(Texture.MagFilter.Bilinear);
-                        tex.setMinFilter(Texture.MinFilter.BilinearNoMipMaps);
+                        tex.setMagFilter(ITexture.MagFilter.Bilinear);
+                        tex.setMinFilter(ITexture.MinFilter.BilinearNoMipMaps);
                     }
                 }
                 // set page

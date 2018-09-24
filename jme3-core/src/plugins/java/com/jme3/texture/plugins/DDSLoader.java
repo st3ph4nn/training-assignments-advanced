@@ -35,8 +35,9 @@ import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetLoader;
 import com.jme3.asset.TextureKey;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
-import com.jme3.texture.Texture;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
+import com.jme3.texture.ITexture;
 import com.jme3.texture.image.ColorSpace;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.LittleEndien;
@@ -128,9 +129,9 @@ public class DDSLoader implements AssetLoader {
             in = new LittleEndien(stream);
             loadHeader();
             if (texture3D) {
-                ((TextureKey) info.getKey()).setTextureTypeHint(Texture.Type.ThreeDimensional);
+                ((TextureKey) info.getKey()).setTextureTypeHint(ITexture.Type.ThreeDimensional);
             } else if (depth > 1) {
-                ((TextureKey) info.getKey()).setTextureTypeHint(Texture.Type.CubeMap);
+                ((TextureKey) info.getKey()).setTextureTypeHint(ITexture.Type.CubeMap);
             }
             ArrayList<ByteBuffer> data = readData(((TextureKey) info.getKey()).isFlipY());
             return new Image(pixelFormat, width, height, depth, data, sizes, ColorSpace.sRGB);
@@ -141,7 +142,7 @@ public class DDSLoader implements AssetLoader {
         }
     }
 
-    public Image load(InputStream stream) throws IOException {
+    public IImage load(InputStream stream) throws IOException {
         in = new LittleEndien(stream);
         loadHeader();
         ArrayList<ByteBuffer> data = readData(false);
@@ -264,18 +265,18 @@ public class DDSLoader implements AssetLoader {
                 case PF_DXT1:
                     bpp = 4;
                     if (is(pfFlags, DDPF_ALPHAPIXELS)) {
-                        pixelFormat = Image.Format.DXT1A;
+                        pixelFormat = Format.DXT1A;
                     } else {
-                        pixelFormat = Image.Format.DXT1;
+                        pixelFormat = Format.DXT1;
                     }
                     break;
                 case PF_DXT3:
                     bpp = 8;
-                    pixelFormat = Image.Format.DXT3;
+                    pixelFormat = Format.DXT3;
                     break;
                 case PF_DXT5:
                     bpp = 8;
-                    pixelFormat = Image.Format.DXT5;
+                    pixelFormat = Format.DXT5;
                     if (swizzle == SWIZZLE_xGxR) {
                         normal = true;
                     }
@@ -283,11 +284,11 @@ public class DDSLoader implements AssetLoader {
                 /*
                 case PF_ATI1:
                     bpp = 4;
-                    pixelFormat = Image.Format.LTC;
+                    pixelFormat = Format.LTC;
                     break;
                 case PF_ATI2:
                     bpp = 8;
-                    pixelFormat = Image.Format.LATC;
+                    pixelFormat = Format.LATC;
                     break;
                 */
                 case PF_DX10:
@@ -300,7 +301,7 @@ public class DDSLoader implements AssetLoader {
                 case 113:
                     compressed = false;
                     bpp = 64;
-                    pixelFormat = Image.Format.RGBA16F;
+                    pixelFormat = Format.RGBA16F;
                     break;
                 default:
                     throw new IOException("Unknown fourcc: " + string(fourcc) + ", " + Integer.toHexString(fourcc));

@@ -36,7 +36,8 @@ import com.jme3.asset.AssetLoader;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.FastMath;
 import com.jme3.texture.Image;
-import com.jme3.texture.Image.Format;
+import com.jme3.texture.Format;
+import com.jme3.texture.IImage;
 import com.jme3.util.BufferUtils;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -80,7 +81,7 @@ public final class TGALoader implements AssetLoader {
         InputStream in = null;
         try {
             in = info.openStream();
-            Image img = load(in, flip);
+            IImage img = load(in, flip);
             return img;
         } finally {
             if (in != null) {
@@ -103,7 +104,7 @@ public final class TGALoader implements AssetLoader {
      *         image, either as a RGB888 or RGBA8888
      * @throws java.io.IOException
      */
-    public static Image load(InputStream in, boolean flip) throws IOException {
+    public static IImage load(InputStream in, boolean flip) throws IOException {
         TGAHeader tgaHeader = new TGAHeader(in, flip);
     	boolean flipH = false;
 
@@ -162,8 +163,8 @@ public final class TGALoader implements AssetLoader {
 		return scratch;
 	}
 
-	private static Image createTextureImageObject(TGAHeader tgaHeader, Format format, ByteBuffer scratch) {
-		Image textureImage = new Image();
+	private static IImage createTextureImageObject(TGAHeader tgaHeader, Format format, ByteBuffer scratch) {
+		IImage textureImage = new Image();
         textureImage.setFormat(format);
         textureImage.setWidth(tgaHeader.getWidth());
         textureImage.setHeight(tgaHeader.getHeight());

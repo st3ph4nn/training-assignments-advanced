@@ -56,246 +56,7 @@ import java.util.logging.Logger;
  * @author Joshua Slack
  * @version $Id: Texture.java 4131 2009-03-19 20:15:28Z blaine.dev $
  */
-public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable {
-
-    public enum Type {
-
-        /**
-         * Two dimensional texture (default). A rectangle.
-         */
-        TwoDimensional,
-        
-        /**
-         * An array of two dimensional textures. 
-         */
-        TwoDimensionalArray,
-
-        /**
-         * Three dimensional texture. (A cube)
-         */
-        ThreeDimensional,
-
-        /**
-         * A set of 6 TwoDimensional textures arranged as faces of a cube facing
-         * inwards.
-         */
-        CubeMap;
-    }
-
-    public enum MinFilter {
-
-        /**
-         * Nearest neighbor interpolation is the fastest and crudest filtering
-         * method - it simply uses the color of the texel closest to the pixel
-         * center for the pixel color. While fast, this results in aliasing and
-         * shimmering during minification. (GL equivalent: GL_NEAREST)
-         */
-        NearestNoMipMaps(false),
-
-        /**
-         * In this method the four nearest texels to the pixel center are
-         * sampled (at texture level 0), and their colors are combined by
-         * weighted averages. Though smoother, without mipmaps it suffers the
-         * same aliasing and shimmering problems as nearest
-         * NearestNeighborNoMipMaps. (GL equivalent: GL_LINEAR)
-         */
-        BilinearNoMipMaps(false),
-
-        /**
-         * Same as NearestNeighborNoMipMaps except that instead of using samples
-         * from texture level 0, the closest mipmap level is chosen based on
-         * distance. This reduces the aliasing and shimmering significantly, but
-         * does not help with blockiness. (GL equivalent:
-         * GL_NEAREST_MIPMAP_NEAREST)
-         */
-        NearestNearestMipMap(true),
-
-        /**
-         * Same as BilinearNoMipMaps except that instead of using samples from
-         * texture level 0, the closest mipmap level is chosen based on
-         * distance. By using mipmapping we avoid the aliasing and shimmering
-         * problems of BilinearNoMipMaps. (GL equivalent:
-         * GL_LINEAR_MIPMAP_NEAREST)
-         */
-        BilinearNearestMipMap(true),
-
-        /**
-         * Similar to NearestNeighborNoMipMaps except that instead of using
-         * samples from texture level 0, a sample is chosen from each of the
-         * closest (by distance) two mipmap levels. A weighted average of these
-         * two samples is returned. (GL equivalent: GL_NEAREST_MIPMAP_LINEAR)
-         */
-        NearestLinearMipMap(true),
-
-        /**
-         * Trilinear filtering is a remedy to a common artifact seen in
-         * mipmapped bilinearly filtered images: an abrupt and very noticeable
-         * change in quality at boundaries where the renderer switches from one
-         * mipmap level to the next. Trilinear filtering solves this by doing a
-         * texture lookup and bilinear filtering on the two closest mipmap
-         * levels (one higher and one lower quality), and then linearly
-         * interpolating the results. This results in a smooth degradation of
-         * texture quality as distance from the viewer increases, rather than a
-         * series of sudden drops. Of course, closer than Level 0 there is only
-         * one mipmap level available, and the algorithm reverts to bilinear
-         * filtering (GL equivalent: GL_LINEAR_MIPMAP_LINEAR)
-         */
-        Trilinear(true);
-
-        private final boolean usesMipMapLevels;
-
-        private MinFilter(boolean usesMipMapLevels) {
-            this.usesMipMapLevels = usesMipMapLevels;
-        }
-
-        public boolean usesMipMapLevels() {
-            return usesMipMapLevels;
-        }
-    }
-
-    public enum MagFilter {
-
-        /**
-         * Nearest neighbor interpolation is the fastest and crudest filtering
-         * mode - it simply uses the color of the texel closest to the pixel
-         * center for the pixel color. While fast, this results in texture
-         * 'blockiness' during magnification. (GL equivalent: GL_NEAREST)
-         */
-        Nearest,
-
-        /**
-         * In this mode the four nearest texels to the pixel center are sampled
-         * (at the closest mipmap level), and their colors are combined by
-         * weighted average according to distance. This removes the 'blockiness'
-         * seen during magnification, as there is now a smooth gradient of color
-         * change from one texel to the next, instead of an abrupt jump as the
-         * pixel center crosses the texel boundary. (GL equivalent: GL_LINEAR)
-         */
-        Bilinear;
-
-    }
-
-    public enum WrapMode {
-        /**
-         * Only the fractional portion of the coordinate is considered.
-         */
-        Repeat,
-        
-        /**
-         * Only the fractional portion of the coordinate is considered, but if
-         * the integer portion is odd, we'll use 1 - the fractional portion.
-         * (Introduced around OpenGL1.4) Falls back on Repeat if not supported.
-         */
-        MirroredRepeat,
-        
-        /**
-         * coordinate will be clamped to [0,1]
-         * 
-         * @deprecated Not supported by OpenGL 3
-         */
-        @Deprecated
-        Clamp,
-        /**
-         * mirrors and clamps the texture coordinate, where mirroring and
-         * clamping a value f computes:
-         * <code>mirrorClamp(f) = min(1, max(1/(2*N),
-         * abs(f)))</code> where N
-         * is the size of the one-, two-, or three-dimensional texture image in
-         * the direction of wrapping. (Introduced after OpenGL1.4) Falls back on
-         * Clamp if not supported.
-         * 
-         * @deprecated Not supported by OpenGL 3
-         */
-        @Deprecated
-        MirrorClamp,
-        
-        /**
-         * coordinate will be clamped to the range [-1/(2N), 1 + 1/(2N)] where N
-         * is the size of the texture in the direction of clamping. Falls back
-         * on Clamp if not supported.
-         * 
-         * @deprecated Not supported by OpenGL 3 or OpenGL ES 2
-         */ 
-        @Deprecated
-        BorderClamp,
-        /**
-         * Wrap mode MIRROR_CLAMP_TO_BORDER_EXT mirrors and clamps to border the
-         * texture coordinate, where mirroring and clamping to border a value f
-         * computes:
-         * <code>mirrorClampToBorder(f) = min(1+1/(2*N), max(1/(2*N), abs(f)))</code>
-         * where N is the size of the one-, two-, or three-dimensional texture
-         * image in the direction of wrapping." (Introduced after OpenGL1.4)
-         * Falls back on BorderClamp if not supported.
-         * 
-         * @deprecated Not supported by OpenGL 3
-         */
-        @Deprecated
-        MirrorBorderClamp,
-        /**
-         * coordinate will be clamped to the range [1/(2N), 1 - 1/(2N)] where N
-         * is the size of the texture in the direction of clamping. Falls back
-         * on Clamp if not supported.
-         */
-        EdgeClamp,
-        
-        /**
-         * mirrors and clamps to edge the texture coordinate, where mirroring
-         * and clamping to edge a value f computes:
-         * <code>mirrorClampToEdge(f) = min(1-1/(2*N), max(1/(2*N), abs(f)))</code>
-         * where N is the size of the one-, two-, or three-dimensional texture
-         * image in the direction of wrapping. (Introduced after OpenGL1.4)
-         * Falls back on EdgeClamp if not supported.
-         * 
-         * @deprecated Not supported by OpenGL 3
-         */
-        MirrorEdgeClamp;
-    }
-
-    public enum WrapAxis {
-        /**
-         * S wrapping (u or "horizontal" wrap)
-         */
-        S,
-        /**
-         * T wrapping (v or "vertical" wrap)
-         */
-        T,
-        /**
-         * R wrapping (w or "depth" wrap)
-         */
-        R;
-    }
-
-    /**
-     * If this texture is a depth texture (the format is Depth*) then
-     * this value may be used to compare the texture depth to the R texture
-     * coordinate. 
-     */
-    public enum ShadowCompareMode {
-        /**
-         * Shadow comparison mode is disabled.
-         * Texturing is done normally.
-         */
-        Off,
-
-        /**
-         * Compares the 3rd texture coordinate R to the value
-         * in this depth texture. If R <= texture value then result is 1.0,
-         * otherwise, result is 0.0. If filtering is set to bilinear or trilinear
-         * the implementation may sample the texture multiple times to provide
-         * smoother results in the range [0, 1].
-         */
-        LessOrEqual,
-
-        /**
-         * Compares the 3rd texture coordinate R to the value
-         * in this depth texture. If R >= texture value then result is 1.0,
-         * otherwise, result is 0.0. If filtering is set to bilinear or trilinear
-         * the implementation may sample the texture multiple times to provide
-         * smoother results in the range [0, 1].
-         */
-        GreaterOrEqual
-    }
+public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable, ITexture {
 
     /**
      * The name of the texture (if loaded as a resource).
@@ -337,20 +98,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
     public Texture() {
     }
 
-    /**
-     * @return the MinificationFilterMode of this texture.
-     */
-    public MinFilter getMinFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getMinFilter()
+	 */
+    @Override
+	public MinFilter getMinFilter() {
         return minificationFilter;
     }
 
-    /**
-     * @param minificationFilter
-     *            the new MinificationFilterMode for this texture.
-     * @throws IllegalArgumentException
-     *             if minificationFilter is null
-     */
-    public void setMinFilter(MinFilter minificationFilter) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setMinFilter(com.jme3.texture.Texture.MinFilter)
+	 */
+    @Override
+	public void setMinFilter(MinFilter minificationFilter) {
         if (minificationFilter == null) {
             throw new IllegalArgumentException(
                     "minificationFilter can not be null.");
@@ -361,20 +121,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         }
     }
 
-    /**
-     * @return the MagnificationFilterMode of this texture.
-     */
-    public MagFilter getMagFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getMagFilter()
+	 */
+    @Override
+	public MagFilter getMagFilter() {
         return magnificationFilter;
     }
 
-    /**
-     * @param magnificationFilter
-     *            the new MagnificationFilter for this texture.
-     * @throws IllegalArgumentException
-     *             if magnificationFilter is null
-     */
-    public void setMagFilter(MagFilter magnificationFilter) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setMagFilter(com.jme3.texture.Texture.MagFilter)
+	 */
+    @Override
+	public void setMagFilter(MagFilter magnificationFilter) {
         if (magnificationFilter == null) {
             throw new IllegalArgumentException(
                     "magnificationFilter can not be null.");
@@ -382,22 +141,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         this.magnificationFilter = magnificationFilter;
     }
 
-    /**
-     * @return The ShadowCompareMode of this texture.
-     * @see ShadowCompareMode
-     */
-    public ShadowCompareMode getShadowCompareMode(){
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getShadowCompareMode()
+	 */
+    @Override
+	public ShadowCompareMode getShadowCompareMode(){
         return shadowCompareMode;
     }
 
-    /**
-     * @param compareMode
-     *            the new ShadowCompareMode for this texture.
-     * @throws IllegalArgumentException
-     *             if compareMode is null
-     * @see ShadowCompareMode
-     */
-    public void setShadowCompareMode(ShadowCompareMode compareMode){
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setShadowCompareMode(com.jme3.texture.Texture.ShadowCompareMode)
+	 */
+    @Override
+	public void setShadowCompareMode(ShadowCompareMode compareMode){
         if (compareMode == null){
             throw new IllegalArgumentException(
                     "compareMode can not be null.");
@@ -484,20 +240,19 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         this.name = name;
     }
 
-    /**
-     * @return the anisotropic filtering level for this texture. Default value
-     * is 0 (use value from config), 
-     * 1 means 1x (no anisotropy), 2 means x2, 4 is x4, etc.
-     */
-    public int getAnisotropicFilter() {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#getAnisotropicFilter()
+	 */
+    @Override
+	public int getAnisotropicFilter() {
         return anisotropicFilter;
     }
 
-    /**
-     * @param level
-     *            the anisotropic filtering level for this texture.
-     */
-    public void setAnisotropicFilter(int level) {
+    /* (non-Javadoc)
+	 * @see com.jme3.texture.ITexture#setAnisotropicFilter(int)
+	 */
+    @Override
+	public void setAnisotropicFilter(int level) {
         anisotropicFilter = Math.max(0, level);
     }
 
@@ -559,15 +314,12 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
         return hash;
     }
 
-   /** Retrieve a basic clone of this Texture (ie, clone everything but the
-     * image data, which is shared)
-     *
-     * @return Texture
-     * 
-     * @deprecated Use {@link Texture#clone()} instead.
-     */
-    @Deprecated
-    public Texture createSimpleClone(Texture rVal) {
+   /* (non-Javadoc)
+ * @see com.jme3.texture.ITexture#createSimpleClone(com.jme3.texture.Texture)
+ */
+    @Override
+	@Deprecated
+    public ITexture createSimpleClone(Texture rVal) {
         rVal.setMinFilter(minificationFilter);
         rVal.setMagFilter(magnificationFilter);
         rVal.setShadowCompareMode(shadowCompareMode);
@@ -582,8 +334,9 @@ public abstract class Texture implements CloneableSmartAsset, Savable, Cloneable
      * @deprecated Use {@link Texture#clone()} instead.
      */
     @Deprecated
-    public abstract Texture createSimpleClone();
+    public abstract ITexture createSimpleClone();
 
+    @Override
     public void write(JmeExporter e) throws IOException {
         OutputCapsule capsule = e.getCapsule(this);
         capsule.write(name, "name", null);
